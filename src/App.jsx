@@ -1,11 +1,16 @@
+import Auth from './components/Auth'
+import RoleSwitch from './components/RoleSwitch';
+import { auth } from './config/FirebaseConfig'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 function App() {
 
+  const [user] = useAuthState(auth)
+
   return (
     <>
-      <div>
-        <h1>Lynx</h1>
-        <h2>Akademicki System Zarządzania Zadaniami</h2>
+      <div className='main-container'>
+        {user == null ? <Auth /> : <RoleSwitch />}
       </div>
     </>
   )
