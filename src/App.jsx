@@ -6,15 +6,15 @@ import RoleSwitch from './components/RoleSwitch';
 
 function App() {
 
-  const [user] = useAuthState(auth)
+    const [user] = useAuthState(auth)
 
-  return (
-    <>
-      <div className='main-container'>
-        {user == null ? <Auth /> : <RoleSwitch />}
-      </div>
-    </>
-  )
+    return (
+        <>
+            <div className='main-container'>
+                {user == null ? <Auth /> : <RoleSwitch />}
+            </div>
+        </>
+    )
 }
 
 export default App
