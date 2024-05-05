@@ -1,34 +1,23 @@
-import { getDocs, collection, query, where } from 'firebase/firestore'
-import { useEffect, useState } from 'react';
+import React from 'react'
+import { useEffect } from 'react';
+import { observer } from 'mobx-react-lite'
+
+import { useStore } from '../mobx/Store'
 
 import StudentContent from './StudentContent';
 import TeacherContent from './TeacherContent';
 import LogOutButton from './LogOutButton';
-import { auth } from '../config/FirebaseConfig'
-import { db } from '../config/FirebaseConfig'
 
-export default function RoleSwitch() {
+export default observer(function RoleSwitch() {
 
-    const [currentRole, setCurrentRole] = useState([])
-    const rolesRef = collection(db, 'roles')
+    const { appStorage } = useStore();
 
-    const getRoles = async () => {
-        try {
-            const roleQuery = query(rolesRef, where("userId", "==", auth?.currentUser?.uid))
-            const data = await getDocs(roleQuery)
-            const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
-            setCurrentRole(filteredData[0].role)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    useEffect(() => { getRoles() }, [])
+    useEffect(() => { appStorage.getRoles() }, [])
 
     return (
         <>
             <LogOutButton />
-            {currentRole == 'teacher' ? <TeacherContent /> : <StudentContent />}
+            {appStorage.currentRole == 'teacher' ? <TeacherContent /> : <StudentContent />}
         </>
     )
-}
+})
