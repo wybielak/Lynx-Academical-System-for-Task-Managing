@@ -1,8 +1,9 @@
 import { useRef } from 'react'
-import { auth } from '../config/FirebaseConfig'
-import { db } from '../config/FirebaseConfig'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { addDoc, collection } from 'firebase/firestore'
+
+import { auth } from '../config/FirebaseConfig'
+import { db } from '../config/FirebaseConfig'
 
 export default function Auth() {
 
@@ -15,7 +16,7 @@ export default function Auth() {
     const signIn = async () => {
         try {
             createUserWithEmailAndPassword(auth, emailRef.current?.value, passwordRef.current?.value).then((createdUser) => {
-                addDoc(rolesRef, {userId: createdUser.user.uid, role: roleRef.current?.value})
+                addDoc(rolesRef, { userId: createdUser.user.uid, role: roleRef.current?.value })
             })
         } catch (err) {
             console.error(err)
@@ -27,7 +28,7 @@ export default function Auth() {
             <form>
                 <label>email</label>
                 <input type="text" ref={emailRef} />
-
+                
                 <label>password</label>
                 <input type="text" ref={passwordRef} />
 
@@ -39,7 +40,7 @@ export default function Auth() {
             </form>
 
             <div>
-                <button type="button"onClick={signIn}>create account</button>
+                <button type="button" onClick={signIn}>create account</button>
             </div>
         </>
     )

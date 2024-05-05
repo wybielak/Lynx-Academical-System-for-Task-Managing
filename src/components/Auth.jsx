@@ -1,6 +1,7 @@
 import { useRef } from 'react'
-import { auth } from '../config/FirebaseConfig'
 import { signInWithEmailAndPassword } from 'firebase/auth'
+
+import { auth } from '../config/FirebaseConfig'
 
 export default function Auth() {
 
@@ -24,7 +25,7 @@ export default function Auth() {
                 <input className='border' type="text" ref={passwordRef} />
             </form>
             <div>
-                <button type="button"onClick={logIn}>log in</button>
+                <button type="button" onClick={logIn}>log in</button>
             </div>
         </>
     )

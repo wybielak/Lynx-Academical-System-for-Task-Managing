@@ -1,6 +1,7 @@
 import React from 'react'
-import { auth } from '../config/FirebaseConfig'
 import { signOut } from 'firebase/auth'
+
+import { auth } from '../config/FirebaseConfig'
 
 export default function LogOutButton() {
 

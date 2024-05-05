@@ -1,6 +1,7 @@
 import React from 'react'
-import AddUser from './AddUser'
+
 import { auth } from '../config/FirebaseConfig'
+import AddUser from './AddUser'
 
 export default function TeacherContent() {
   return (
