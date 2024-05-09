@@ -1,46 +1,43 @@
-import { useRef } from 'react'
-import { auth } from '../config/FirebaseConfig'
-import { db } from '../config/FirebaseConfig'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { addDoc, collection } from 'firebase/firestore'
+import React from 'react'
+import { observer } from 'mobx-react-lite'
 
-export default function Auth() {
+import { useStore } from '../mobx/Store'
 
-    const emailRef = useRef(null)
-    const passwordRef = useRef(null)
-    const roleRef = useRef()
+export default observer(function AddUser() {
 
-    const rolesRef = collection(db, 'roles')
-
-    const signIn = async () => {
-        try {
-            createUserWithEmailAndPassword(auth, emailRef.current?.value, passwordRef.current?.value).then((createdUser) => {
-                addDoc(rolesRef, {userId: createdUser.user.uid, role: roleRef.current?.value})
-            })
-        } catch (err) {
-            console.error(err)
-        }
-    }
+    const { appStorage } = useStore();
 
     return (
         <>
             <form>
+
                 <label>email</label>
-                <input type="text" ref={emailRef} />
+                <input type="text" value={appStorage.newUserEmail}
+                    onChange={(e) => { appStorage.setNewUserEmail(e.target.value) }}
+                />
 
                 <label>password</label>
-                <input type="text" ref={passwordRef} />
+                <input type="text" value={appStorage.newUserPassword}
+                    onChange={(e) => { appStorage.setNewUserPassword(e.target.value) }}
+                    onKeyDown={async (event) => {
+                        if (event.key === 'Enter') {
+                            appStorage.signIn()
+                        }
+                    }}
+                />
 
                 <label>role</label>
-                <select ref={roleRef}>
+                <select value={appStorage.newUserRole}
+                    onChange={(e) => { appStorage.setNewUserRole(e.target.value) }}>
                     <option value="student">student</option>
                     <option value="teacher">teacher</option>
                 </select>
+                
             </form>
 
             <div>
-                <button type="button"onClick={signIn}>create account</button>
+                <button type="button" onClick={appStorage.signIn}>create account</button>
             </div>
         </>
     )
-}
+})

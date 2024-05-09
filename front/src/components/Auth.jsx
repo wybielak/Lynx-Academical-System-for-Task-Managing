@@ -1,31 +1,37 @@
-import { useRef } from 'react'
-import { auth } from '../config/FirebaseConfig'
-import { signInWithEmailAndPassword } from 'firebase/auth'
+import React from 'react'
+import { observer } from 'mobx-react-lite'
 
-export default function Auth() {
+import { useStore } from '../mobx/Store'
 
-    const emailRef = useRef(null)
-    const passwordRef = useRef(null)
+export default observer(function Auth() {
 
-    const logIn = async () => {
-        try {
-            await signInWithEmailAndPassword(auth, emailRef.current?.value, passwordRef.current?.value)
-        } catch (err) {
-            console.error(err)
-        }
-    }
+    const { appStorage } = useStore();
 
     return (
         <>
             <form>
+
                 <label>email</label>
-                <input className='border' type="text" ref={emailRef} />
-                <label>password</label>
-                <input className='border' type="text" ref={passwordRef} />
+                <input className='border' type="text" value={appStorage.email}
+                    onChange={(e) => { appStorage.onChangeEmail(e) }}
+                />
+
+                <label>password
+                    <input className='border' type="text" value={appStorage.password}
+                        onKeyDown={async (event) => {
+                            if (event.key === 'Enter') {
+                                appStorage.logIn()
+                            }
+                        }}
+                        onChange={(e) => { appStorage.onChangePassword(e) }}
+                    />
+                </label>
+
             </form>
+            
             <div>
-                <button type="button"onClick={logIn}>log in</button>
+                <button type="button" onClick={appStorage.logIn}>log in</button>
             </div>
         </>
     )
-}
+})

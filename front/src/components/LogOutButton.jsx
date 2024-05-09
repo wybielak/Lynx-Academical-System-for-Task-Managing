@@ -1,20 +1,15 @@
 import React from 'react'
-import { auth } from '../config/FirebaseConfig'
-import { signOut } from 'firebase/auth'
+import { observer } from 'mobx-react-lite'
 
-export default function LogOutButton() {
+import { useStore } from '../mobx/Store'
 
-    const logOut = async () => {
-        try {
-            await signOut(auth)
-        } catch (err) {
-            console.log(err)
-        }
-    }
+export default observer(function LogOutButton() {
+
+    const { appStorage } = useStore();
 
     return (
         <div>
-            <button onClick={logOut} >log out</button>
+            <button onClick={appStorage.logOut} >log out</button>
         </div>
     )
-}
+})

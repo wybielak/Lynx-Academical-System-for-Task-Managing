@@ -6,13 +6,13 @@ import { getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyClYqOEPWtzA7W12O9UjxlpgCjg-nCd2D4",
-  authDomain: "pzeclon.firebaseapp.com",
-  projectId: "pzeclon",
-  storageBucket: "pzeclon.appspot.com",
-  messagingSenderId: "350480828015",
-  appId: "1:350480828015:web:ded0e2500bd269806d6f9a",
-  measurementId: "G-5YG4TFRY5H"
+    apiKey: "AIzaSyClYqOEPWtzA7W12O9UjxlpgCjg-nCd2D4",
+    authDomain: "pzeclon.firebaseapp.com",
+    projectId: "pzeclon",
+    storageBucket: "pzeclon.appspot.com",
+    messagingSenderId: "350480828015",
+    appId: "1:350480828015:web:ded0e2500bd269806d6f9a",
+    measurementId: "G-5YG4TFRY5H"
 };
 
 
