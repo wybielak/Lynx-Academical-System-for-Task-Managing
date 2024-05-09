@@ -1,0 +1,6 @@
+@lynxFilesApi_HostAddress = http://localhost:5216
+
+GET {{lynxFilesApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
