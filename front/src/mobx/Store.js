@@ -1,4 +1,5 @@
 import { createContext, useContext } from "react";
+
 import AppStorage from "./AppStorage";
 
 // obiekt typu Store z inicjalizacją AppStorage

@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { observer } from 'mobx-react-lite'
 
 import { useStore } from '../mobx/Store'
-
 import StudentContent from './StudentContent';
 import TeacherContent from './TeacherContent';
 import LogOutButton from './LogOutButton';
@@ -16,8 +15,8 @@ export default observer(function RoleSwitch() {
 
     return (
         <>
-            <LogOutButton />
             {appStorage.currentRole == 'teacher' ? <TeacherContent /> : <StudentContent />}
+            <LogOutButton />
         </>
     )
 })

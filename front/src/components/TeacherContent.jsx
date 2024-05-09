@@ -1,9 +1,8 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { useStore } from '../mobx/Store'
-
 import { auth } from '../config/FirebaseConfig'
+import { useStore } from '../mobx/Store'
 import AddUser from './AddUser'
 
 export default observer(function TeacherContent() {
@@ -12,9 +11,8 @@ export default observer(function TeacherContent() {
 
     return (
         <>
-            <div>TeacherContent</div>
-            {/* <div>{auth?.currentUser?.email}</div> */}
-            <div>{appStorage.currentRole}</div>
+            <div>Jesteś zalogowany jako: {auth?.currentUser?.email}</div>
+            <div>[TeacherContent]</div>
             <AddUser />
         </>
     )

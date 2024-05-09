@@ -10,17 +10,29 @@ export default observer(function AddUser() {
     return (
         <>
             <form>
+
                 <label>email</label>
-                <input type="text" value={appStorage.newUserEmail} onChange={(e) => { appStorage.onChangeNewUserEmail(e) }} />
+                <input type="text" value={appStorage.newUserEmail}
+                    onChange={(e) => { appStorage.setNewUserEmail(e.target.value) }}
+                />
 
                 <label>password</label>
-                <input type="text" value={appStorage.newUserPassword} onChange={(e) => { appStorage.onChangeNewUserPassword(e) }} />
+                <input type="text" value={appStorage.newUserPassword}
+                    onChange={(e) => { appStorage.setNewUserPassword(e.target.value) }}
+                    onKeyDown={async (event) => {
+                        if (event.key === 'Enter') {
+                            appStorage.signIn()
+                        }
+                    }}
+                />
 
                 <label>role</label>
-                <select ref={appStorage.allRoles}>
+                <select value={appStorage.newUserRole}
+                    onChange={(e) => { appStorage.setNewUserRole(e.target.value) }}>
                     <option value="student">student</option>
                     <option value="teacher">teacher</option>
                 </select>
+                
             </form>
 
             <div>
