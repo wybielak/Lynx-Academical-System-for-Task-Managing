@@ -10,26 +10,26 @@ namespace lynxFileAPI.Controllers
     {
         //https://www.youtube.com/watch?v=bN64VNISNw0
 
-        private readonly IManageImage _iManageImage;
-        public FileManagerController(IManageImage iManageImage)
+        private readonly IManageFile _iManageImage;
+        public FileManagerController(IManageFile iManageImage)
         {
             _iManageImage = iManageImage;
         }
 
         [HttpPost]
         [Route("uploadfile")]
-        public async Task<IActionResult> UploadFile(IFormFile _IFormFile)
+        public async Task<IActionResult> UploadFile(IFormFile _IFormFile, string _SubjectName, string _StudentName, string _TaskName)
         {
-            var result = await _iManageImage.UploadFile(_IFormFile);
+            var result = await _iManageImage.UploadFile(_IFormFile, _SubjectName, _StudentName, _TaskName);
             return Ok(result);
         }
 
         [HttpGet]
         [Route("downloadfile")]
-        public async Task<IActionResult> DownloadFile(string FileName)
+        public async Task<IActionResult> DownloadFile(string _SubjectName, string _StudentName, string _TaskName)
         {
-            var result = await _iManageImage.DownloadFile(FileName);
-            return File(result.Item1, result.Item2, result.Item2);
+            var result = await _iManageImage.DownloadFile(_SubjectName, _StudentName, _TaskName);
+            return File(result.Item1, result.Item2, result.Item3);
         }
 
     }
