@@ -3,6 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from './config/FirebaseConfig'
 import Auth from './components/Auth'
 import RoleSwitch from './components/RoleSwitch';
+import './index.css'
 
 function App() {
 
