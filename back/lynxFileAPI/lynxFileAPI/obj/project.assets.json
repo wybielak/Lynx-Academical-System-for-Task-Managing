@@ -428,19 +428,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dawid\\.nuget\\packages\\": {}
+    "C:\\Users\\PC\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+      "projectUniqueName": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
       "projectName": "lynxFileAPI",
-      "projectPath": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
-      "packagesPath": "C:\\Users\\dawid\\.nuget\\packages\\",
-      "outputPath": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
+      "projectPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+      "outputPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\dawid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -495,7 +495,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

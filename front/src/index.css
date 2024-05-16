@@ -1,3 +1,16 @@
+:root {
+    --white: #fff;
+    --lightGray1: #fefefe;
+    --lightGray2: #bbb;
+    --lightGray3: #999;
+    --green1: #43655a;
+    --green2: #405e5f;
+    --feldgrau: #45555c;
+    --darkGray1: #474747;
+    --darkGray2: #494d53;
+    --black: #000;
+}
+
 body, .main-container {
     margin: 0;
     padding: 0;
@@ -5,8 +18,8 @@ body, .main-container {
     width: 100vw;
     height: 100vh;
 
-    background: #fefefe;
-    color: #474747;
+    background: var(--lightGray1);
+    color: var(--darkGray1);
 
     display: flex;
 
@@ -37,9 +50,9 @@ body, .main-container {
     padding: 25px 50px;
     width: 302px;
     height: 404px;
-    border: 2px solid #fefefe;
-    background-image: linear-gradient(to right top, #43655a, #405e5f, #45555c, #494d53, #474747);
-    color: #fefefe;
+    border: 2px solid var(--lightGray1);
+    background-image: linear-gradient(to right top, var(--green1), var(--green2), var(--feldgrau), var(--darkGray2), var(--darkGray1));
+    color: var(--lightGray1);
     border-top-left-radius: 50px;
 }
 
@@ -60,9 +73,9 @@ body, .main-container {
     padding: 25px 50px;
     width: 300px;
     height: 400px;
-    border: 2px solid #474747;
+    border: 2px solid var(--darkGray1);;
     border-bottom-right-radius: 50px;
-    background: #fefefe;
+    background: var(--lightGray1);
 }
 
 .auth-form-inner h1 {
@@ -71,7 +84,7 @@ body, .main-container {
     position: relative;
     top: -135px;
     left: -100px;
-    background: #fefefe;
+    background: var(--lightGray1);
     font-size: 3rem;
 }
 
@@ -81,7 +94,7 @@ body, .main-container {
     padding: 10px 15px;
     margin: 20px;
     background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
-    color: #fefefe;
+    color: var(--lightGray1);
     outline: none;
     border: none;
     transition: .1s;
@@ -114,4 +127,19 @@ body, .main-container {
     padding: 5px;
     font-size: 1.2rem;
     width: 300px;
+}
+
+
+
+
+
+
+
+
+.content {
+    background-color: var(--lightGray2);
+}
+
+.uploadPanel {
+    background-color: var(--lightGray3);
 }
