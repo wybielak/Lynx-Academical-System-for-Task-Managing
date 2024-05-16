@@ -11,9 +11,11 @@ export default observer(function TeacherContent() {
 
     return (
         <>
-            <div>Jesteś zalogowany jako: {auth?.currentUser?.email}</div>
-            <div>[TeacherContent]</div>
-            <AddUser />
+            <div className='content'>
+                <div>Jesteś zalogowany jako: {auth?.currentUser?.email}</div>
+                <div>[TeacherContent]</div>
+                <AddUser />
+            </div>
         </>
     )
 })
