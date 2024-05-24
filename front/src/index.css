@@ -26,6 +26,22 @@ body, .main-container {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.logOutButton {
+    width: 100px;
+    padding: 10px 15px;
+    background-image: var(--lightGray1);
+    outline: none;
+    border: none;
+    transition: .1s;
+    font-weight: bold;
+}
+
+.logOutButton:hover {
+    cursor: pointer;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
 .auth-form {
     width: 100vw;
     display: flex;
@@ -129,17 +145,44 @@ body, .main-container {
     width: 300px;
 }
 
+.content .header {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+
+    color: var(--lightGray1);
+    background-image: linear-gradient(to right top, var(--green1), var(--green2), var(--feldgrau), var(--darkGray2), var(--darkGray1));
+}
+
+.content .header .left, .content .header .right {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+}
+
+.content .header .left > *, .content .header .right > * {
+    padding: 0 5px;
+}
+
+.content .header .role, .content .header .email {
+    font-weight: bold;
+}
+
+.content .header img {
+    height: 50px;
+}
 
 
-
-
-
-
-
-.content {
+/* .content {
     background-color: var(--lightGray2);
 }
 
 .uploadPanel {
     background-color: var(--lightGray3);
-}
+} */

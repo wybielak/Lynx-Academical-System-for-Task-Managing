@@ -17,7 +17,6 @@ export default observer(function RoleSwitch() {
         <>
             {appStorage.currentRole == 'teacher' ? <TeacherContent /> : null}
             {appStorage.currentRole == 'student' ? <StudentContent /> : null}
-            <LogOutButton />
         </>
     )
 })

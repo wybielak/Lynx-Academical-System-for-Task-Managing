@@ -22,6 +22,10 @@ export default class AppStorage {
     // pobieranie roli uzytkownikow z bazy
 
     rolesCollection = collection(db, 'roles')
+    coursesCollection = collection(db, 'courses')
+    tasksCollection = collection(db, 'tasks')
+    usersCollection = collection(db, 'users')
+
     currentRole = undefined
 
     getRoles = async () => {
@@ -125,6 +129,21 @@ export default class AppStorage {
         });
     }
 
+
+    // pobieranie kursów z możliwością dołączenia
+
+    coursesList = []
+
+    getCoursesList = async () => {
+        try {
+            const data = await getDocs(this.coursesCollection)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+            this.coursesList = filteredData
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
 
 
