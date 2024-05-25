@@ -145,6 +145,12 @@ body, .main-container {
     width: 300px;
 }
 
+.content {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
 .content .header {
     width: 100vw;
     display: flex;
@@ -176,6 +182,60 @@ body, .main-container {
 
 .content .header img {
     height: 50px;
+}
+
+.create-user-main {
+    width: fit-content;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.create-user-main h1 {
+    text-align: center;
+}
+
+.create-user-main form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.create-user-main form div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    margin: 5px;
+}
+
+.create-user-main form div label {
+    width: 100px;
+    font-weight: bold;
+}
+
+.create-user-main form div input {
+    padding: 5px;
+}
+
+.create-user-main button {
+    width: 150px;
+    align-self: center;
+    font-size: 1.2rem;
+    padding: 10px 15px;
+    margin: 20px 0;
+    background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
+    color: var(--lightGray1);
+    outline: none;
+    border: none;
+    transition: .1s;
+}
+
+.create-user-main button:hover {
+    cursor: pointer;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 

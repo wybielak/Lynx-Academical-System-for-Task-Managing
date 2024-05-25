@@ -101,8 +101,11 @@ export default class AppStorage {
     logIn = async () => {
         console.log("proba zalogowania za pomoca email: ", this.email, " password: ", this.password)
         try {
-            await signInWithEmailAndPassword(auth, this.email, this.password)
-            console.log("zalogowano")
+            signInWithEmailAndPassword(auth, this.email, this.password).then(() => {
+                console.log("zalogowano")
+                this.onChangeEmail('')
+                this.onChangePassword('')
+            })
         } catch (err) {
             console.error(err)
         }
