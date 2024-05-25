@@ -135,7 +135,7 @@ export default class AppStorage {
 
     // pobieranie kursów z możliwością dołączenia
 
-    coursesList = []
+    coursesListWithoutStudent = []
 
     getCoursesListWithoutStudent = async (studentid) => {
         try {
@@ -168,7 +168,7 @@ export default class AppStorage {
                 }
             }
 
-            this.coursesList = filteredData2
+            this.coursesListWithoutStudent = filteredData2
         } catch (err) {
             console.error(err)
         }
@@ -208,6 +208,30 @@ export default class AppStorage {
             })
 
 
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    coursesListWithWaitingStudent = []
+
+    getCoursesListWithWaitingStudent = async (studentid) => {
+        try {
+            const data = await getDocs(this.coursesCollection)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+            var filteredData2 = []
+
+            for (var i = 0; i < filteredData.length; i++) {
+                if (filteredData[i].waitingStudentsIds) {
+                    if (filteredData[i].waitingStudentsIds.includes(studentid)) {
+                        filteredData2.push(filteredData[i])
+                        continue
+                    }
+                }
+            }
+
+            this.coursesListWithWaitingStudent = filteredData2
         } catch (err) {
             console.error(err)
         }
