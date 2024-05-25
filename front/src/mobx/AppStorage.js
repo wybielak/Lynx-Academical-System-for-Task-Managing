@@ -3,7 +3,7 @@ import axios from 'axios';                  // i zewnetrzne
 import { signOut } from 'firebase/auth'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { addDoc } from 'firebase/firestore'
+import { addDoc, doc, setDoc, updateDoc } from 'firebase/firestore'
 import { getDocs, collection, query, where } from 'firebase/firestore'
 
 import { db } from '../config/FirebaseConfig'   // potem te "nasze"
@@ -137,18 +137,81 @@ export default class AppStorage {
 
     coursesList = []
 
-    getCoursesList = async () => {
+    getCoursesListWithoutStudent = async (studentid) => {
         try {
             const data = await getDocs(this.coursesCollection)
             const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
 
-            this.coursesList = filteredData
+            var filteredData2 = []
+
+            for (var i = 0; i < filteredData.length; i++) {
+
+                if (filteredData[i].waitingStudentsIds && filteredData[i].studentsIds) {
+                    if (!(filteredData[i].waitingStudentsIds.includes(studentid) || filteredData[i].studentsIds.includes(studentid))) {
+                        filteredData2.push(filteredData[i])
+                    }
+                    continue
+                }
+
+                if (filteredData[i].waitingStudentsIds) {
+                    if (!filteredData[i].waitingStudentsIds.includes(studentid)) {
+                        filteredData2.push(filteredData[i])
+                        continue
+                    }
+                }
+
+                if (filteredData[i].studentsIds) {
+                    if (!filteredData[i].studentsIds.includes(studentid)) {
+                        filteredData2.push(filteredData[i])
+                        continue
+                    }
+                }
+            }
+
+            this.coursesList = filteredData2
         } catch (err) {
             console.error(err)
         }
     }
 
+    addWaitingStudentToCourse = async (courseid, studentid) => {
+        try {
 
+            console.log(courseid)
+            console.log(studentid)
+
+            const ref = collection(db, 'courses')
+
+            await getDocs(ref).then((data) => {
+                const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+                var course = null
+
+                for (var i = 0; i < filteredData.length; i++) {
+                    if (courseid == filteredData[i].id) {
+                        course = filteredData[i]
+                        break
+                    }
+                }
+
+                console.log(course)
+
+                var oldWaiting = course.waitingStudentsIds
+
+                if (!oldWaiting) oldWaiting = []
+
+                updateDoc(doc(db, "courses", course.id), {
+                    waitingStudentsIds: [...oldWaiting, studentid]
+                }).then(() => {
+                    console.log('Dodano id studenta do kursu')
+                })
+            })
+
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     // upload plików
 

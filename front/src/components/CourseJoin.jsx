@@ -10,7 +10,7 @@ export default observer(function CourseJoin() {
     const { appStorage } = useStore();
 
     useEffect(() => {
-        appStorage.getCoursesList()
+        appStorage.getCoursesListWithoutStudent(auth?.currentUser?.uid)
     }, [])
 
     return (
@@ -23,7 +23,7 @@ export default observer(function CourseJoin() {
                             <h3>{course.courseName}</h3>
                             <p>{course.ownerName}</p>
                         </div>
-                        <button>Dołącz</button>
+                        <button onClick={() => appStorage.addWaitingStudentToCourse(course.id, auth?.currentUser?.uid)}>Dołącz</button>
                     </div>
                 ))
 
