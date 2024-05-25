@@ -204,6 +204,9 @@ export default class AppStorage {
                     waitingStudentsIds: [...oldWaiting, studentid]
                 }).then(() => {
                     console.log('Dodano id studenta do kursu')
+                    
+                    this.getCoursesListWithoutStudent(studentid)
+                    this.getCoursesListWithWaitingStudent(studentid)
                 })
             })
 
