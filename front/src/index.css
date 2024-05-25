@@ -89,7 +89,7 @@ body, .main-container {
     padding: 25px 50px;
     width: 300px;
     height: 400px;
-    border: 2px solid var(--darkGray1);;
+    border: 2px solid var(--darkGray1);
     border-bottom-right-radius: 50px;
     background: var(--lightGray1);
 }
@@ -147,6 +147,7 @@ body, .main-container {
 
 .content {
     display: flex;
+    align-items: center;
     flex-direction: column;
     flex-wrap: nowrap;
 }
@@ -236,6 +237,44 @@ body, .main-container {
     cursor: pointer;
     border-top-left-radius: 25px;
     border-bottom-right-radius: 25px;
+}
+
+.course-join-info {
+    min-width: 600px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--darkGray1);
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin: 10px 0;
+}
+
+.course-join-info h3 {
+    margin: 5px 0;
+    margin-right: 50px;
+}
+
+.course-join-info p {
+    margin: 5px 0;
+}
+
+.course-join-info button {
+    align-self: center;
+    padding: 10px 15px;
+    background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
+    color: var(--lightGray1);
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    transition: .1s;
+}
+
+.course-join-info button:hover {
+    cursor: pointer;
+    scale: 1.1;
 }
 
 

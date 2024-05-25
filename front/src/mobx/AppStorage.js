@@ -103,8 +103,8 @@ export default class AppStorage {
         try {
             signInWithEmailAndPassword(auth, this.email, this.password).then(() => {
                 console.log("zalogowano")
-                this.onChangeEmail('')
-                this.onChangePassword('')
+                this.email = ''
+                this.password = ''
             })
         } catch (err) {
             console.error(err)

@@ -16,8 +16,8 @@ export default observer(function StudentContent() {
         <>
             <div className='student-content content'>
                 <Header role='Student' userName={auth?.currentUser?.email} />
-                <div>Jesteś zalogowany jako: {auth?.currentUser?.email}</div>
                 <CourseJoin />
+                
                 <div>Kurs [X]</div>
                 <br></br>
                 <div>Zadanie [Y]</div>

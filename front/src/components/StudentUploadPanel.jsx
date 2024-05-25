@@ -11,7 +11,7 @@ export default observer(function StudentUploadPanel() {
     return (
         <>
             <div className='uploadPanel'>
-                <div>Upload</div>
+                <h1>Upload</h1>
                 <br></br>
                 <div>[aktualna zawartość zadania tu] [DELETE]</div>
                 <div>[#hardcoded Zielonka_Programowanie Gesiek Zad1]</div>

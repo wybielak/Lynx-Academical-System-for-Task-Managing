@@ -15,12 +15,15 @@ export default observer(function CourseJoin() {
 
     return (
         <>
-            <div>
+            <div className='course-join'>
                 <h1>Dołącz do kursu</h1>
                 {appStorage.coursesList.map((course, index) => (
-                    <div key={index}>
-                        <h2>{course.courseName}</h2>
-                        <button disabled={true} >Dołącz</button>
+                    <div className='course-join-info' key={index}>
+                        <div>
+                            <h3>{course.courseName}</h3>
+                            <p>{course.ownerName}</p>
+                        </div>
+                        <button>Dołącz</button>
                     </div>
                 ))
 
