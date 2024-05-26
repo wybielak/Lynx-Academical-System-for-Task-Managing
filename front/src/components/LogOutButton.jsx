@@ -9,7 +9,7 @@ export default observer(function LogOutButton() {
 
     return (
         <div>
-            <button onClick={appStorage.logOut} >log out</button>
+            <button className='logOutButton' onClick={appStorage.logOut} >Log out</button>
         </div>
     )
 })

@@ -9,34 +9,40 @@ export default observer(function AddUser() {
 
     return (
         <>
-            <form>
+            <div className='create-user-main'>
+                <h1>Create new user<br />account</h1>
+                <form>
+                    <div>
+                        <label>Email</label>
+                        <input type="text" value={appStorage.newUserEmail}
+                            onChange={(e) => { appStorage.setNewUserEmail(e.target.value) }}
+                        />
+                    </div>
 
-                <label>email</label>
-                <input type="text" value={appStorage.newUserEmail}
-                    onChange={(e) => { appStorage.setNewUserEmail(e.target.value) }}
-                />
+                    <div>
+                        <label>Password</label>
+                        <input type="password" value={appStorage.newUserPassword}
+                            onChange={(e) => { appStorage.setNewUserPassword(e.target.value) }}
+                            onKeyDown={async (event) => {
+                                if (event.key === 'Enter') {
+                                    appStorage.signIn()
+                                }
+                            }}
+                        />
+                    </div>
 
-                <label>password</label>
-                <input type="text" value={appStorage.newUserPassword}
-                    onChange={(e) => { appStorage.setNewUserPassword(e.target.value) }}
-                    onKeyDown={async (event) => {
-                        if (event.key === 'Enter') {
-                            appStorage.signIn()
-                        }
-                    }}
-                />
+                    <div>
+                        <label>Role</label>
+                        <select value={appStorage.newUserRole}
+                            onChange={(e) => { appStorage.setNewUserRole(e.target.value) }}>
+                            <option value="student">Student</option>
+                            <option value="teacher">Teacher</option>
+                        </select>
+                    </div>
 
-                <label>role</label>
-                <select value={appStorage.newUserRole}
-                    onChange={(e) => { appStorage.setNewUserRole(e.target.value) }}>
-                    <option value="student">student</option>
-                    <option value="teacher">teacher</option>
-                </select>
-                
-            </form>
+                </form>
 
-            <div>
-                <button type="button" onClick={appStorage.signIn}>create account</button>
+                <button type="button" onClick={appStorage.signIn}>Create</button>
             </div>
         </>
     )
