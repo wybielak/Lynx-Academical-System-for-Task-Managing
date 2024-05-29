@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";  // kolejnosc importow - najpierw standardowe
 import axios from 'axios';                  // i zewnetrzne
-import { signOut } from 'firebase/auth'
+import { setPersistence, signOut } from 'firebase/auth'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { addDoc, doc, setDoc, updateDoc } from 'firebase/firestore'
@@ -15,19 +15,16 @@ export default class AppStorage {
         makeAutoObservable(this)
     }
 
-    // api url
-
+    // ########################## .Net API URL ##########################
     apiHost = "https://localhost:7227"
 
-    // pobieranie roli uzytkownikow z bazy
+
+    // ########################## ROLE ##########################
 
     rolesCollection = collection(db, 'roles')
-    coursesCollection = collection(db, 'courses')
-    tasksCollection = collection(db, 'tasks')
-    usersCollection = collection(db, 'users')
+    currentRole = ''
 
-    currentRole = undefined
-
+    // pobieranie roli uzytkownikow z bazy
     getRoles = async () => {
         try {
             const roleQuery = query(this.rolesCollection, where("userId", "==", auth?.currentUser?.uid))
@@ -39,18 +36,19 @@ export default class AppStorage {
         }
     }
 
-    setCurrentRole = (r) => { // żeby nie było WARRNINGÓW i ERRORÓW (w <React.StrictMode>) takie rzeczy jak set'owanie tych "stanów" musi być osobną funkcją albo być z dekoratorem @action
-        this.currentRole = r
-        console.log("setCurrentRole = ", this.currentRole)
+    setCurrentRole = (role) => { // żeby nie było WARRNINGÓW i ERRORÓW (w <React.StrictMode>) takie rzeczy jak set'owanie tych "stanów" musi być osobną funkcją albo być z dekoratorem @action
+        this.currentRole = role
+        console.log("currentRole:", this.currentRole)
     }
 
 
+    // ########################## USER #######################
 
-    // tworzenie nowego uzytkownika
-
+    email = ''
+    password = ''
+    newUserRole = 'student' // #hardcoded
     newUserEmail = ''
     newUserPassword = ''
-    newUserRole = 'student' // #hardcoded
 
     setNewUserEmail = (v) => {
         this.newUserEmail = v
@@ -67,28 +65,22 @@ export default class AppStorage {
         // console.log("newUserRole = ", this.newUserRole)
     }
 
+    // tworzenie nowego uzytkownika
     signIn = async () => {
-        console.log("probuje stworzyc uzytkownika: ", this.newUserEmail, this.newUserPassword, this.newUserRole)
+        console.log("Próbuje stworzyć użytkownika: ", this.newUserEmail, this.newUserPassword, this.newUserRole)
         try {
             createUserWithEmailAndPassword(auth, this.newUserEmail, this.newUserPassword)
                 .then((createdUser) => {
                     addDoc(this.rolesCollection, { userId: createdUser.user.uid, role: this.newUserRole })
-                    console.log("utworzono nowego uzytkownika")
+                    console.log("Utworzono nowego użytkownika")
                 })
         } catch (err) {
             console.error(err)
         }
-        console.log("czyszcze inputy")
+        console.log("Czyszcze inputy")
         this.setNewUserEmail('')
         this.setNewUserPassword('')
     }
-
-
-
-    // do logowania sie
-
-    email = ''
-    password = ''
 
     onChangeEmail = (e) => {
         this.email = e.target.value
@@ -98,14 +90,11 @@ export default class AppStorage {
         this.password = e.target.value
     }
 
+    // logowanie sie
     logIn = async () => {
-        console.log("proba zalogowania za pomoca email: ", this.email, " password: ", this.password)
         try {
-            signInWithEmailAndPassword(auth, this.email, this.password).then(() => {
-                console.log("zalogowano")
-                this.email = ''
-                this.password = ''
-            })
+            await signInWithEmailAndPassword(auth, this.email, this.password)
+            console.log("Zalogowano")
         } catch (err) {
             console.error(err)
         }
@@ -114,29 +103,76 @@ export default class AppStorage {
     logOut = async () => {
         try {
             await signOut(auth)
-            console.log("nastapilo wylogowanie")
+            console.log("Nastąpiło wylogowanie")
         } catch (err) {
             console.log(err)
         }
     }
 
 
+    // ########################## KURSY ##########################
 
-    // pomocnicze / debug
+    coursesCollection = collection(db, 'courses')
+    myCourses = [] // #TODO trzeba to jakoś lepiej ogarnąć/ujednolicić 
+    coursesListWithoutStudent = [] // #w
+    coursesListWithWaitingStudent = [] // #w
+    newCourseName = ''
 
-    showRoles = async () => {
-        const q = query(this.rolesCollection, where("role", "!=", " "))
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
-        });
+    setNewCourseName = (name) => {
+        this.newCourseName = name
     }
 
+    // tworzenie nowego kursu
+    createNewCourse = async () => {
 
-    // pobieranie kursów z możliwością dołączenia
+        const docRef = await addDoc(collection(db, "courses"), { // #TODO refractor
+            courseName: this.newCourseName,
+            ownerId: auth.currentUser.uid,
+            ownerName: auth.currentUser.email,
+            studentsIds: [],
+            waitingStudentsIds: [],
+        }).then((res) => {
+            console.log("Utworzono nowy kurs z id: ", res.id);
+            alert("Utworzono kurs")
+            console.log("Czyszcze zmienną")
+            this.setNewCourseName('')
+            this.getMyCourses() // ANCHOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            // console.log("czyszcze input")
+            // document.getElementById("filesUpload").value = ""
+        })
+    }
 
-    coursesListWithoutStudent = []
+    setMyCourses = (coursesData) => {
+        this.myCourses = coursesData
+        console.log("Ustawiono zmienną myCourses")
+    }
 
+    clearMyCourses = () => {
+        this.myCourses = []
+        console.log("Czyszcze kursy")
+    }
+
+    // wylistowanie swoich kursów - nauczyciel
+    getMyCourses = async () => {
+        console.log("Pobieram moje kursy")
+        try {
+            var tmp = [] // może się przydać do czyszczenia stanu (jakby się coś zaczęło kiepścić)
+            const courseQuery = query(this.coursesCollection, where("ownerId", "==", auth?.currentUser?.uid))
+            const data = await getDocs(courseQuery)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+            this.setMyCourses(filteredData)
+            this.showMapVariableIDsPlus(this.myCourses)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    setCoursesListWithoutStudent = (coursesData) => {
+        this.coursesListWithoutStudent = coursesData
+        console.log("Ustawiono zmienną setCoursesListWithoutStudent")
+    }
+
+    // pobieranie kursów z możliwością dołączenia - student
     getCoursesListWithoutStudent = async (studentid) => {
         try {
             const data = await getDocs(this.coursesCollection)
@@ -168,12 +204,14 @@ export default class AppStorage {
                 }
             }
 
-            this.coursesListWithoutStudent = filteredData2
+            this.setCoursesListWithoutStudent(filteredData2)
+
         } catch (err) {
             console.error(err)
         }
     }
 
+    // dołączanie do wybranego kursu - student
     addWaitingStudentToCourse = async (courseid, studentid) => {
         try {
 
@@ -204,7 +242,7 @@ export default class AppStorage {
                     waitingStudentsIds: [...oldWaiting, studentid]
                 }).then(() => {
                     console.log('Dodano id studenta do kursu')
-                    
+
                     this.getCoursesListWithoutStudent(studentid)
                     this.getCoursesListWithWaitingStudent(studentid)
                 })
@@ -216,8 +254,12 @@ export default class AppStorage {
         }
     }
 
-    coursesListWithWaitingStudent = []
+    setCoursesListWithWaitingStudent = (coursesData) => {
+        this.coursesListWithWaitingStudent = coursesData
+        console.log("Ustawiono zmienną coursesListWithWaitingStudent")
+    }
 
+    // pobieranie kursów w których jest oczekujący - student
     getCoursesListWithWaitingStudent = async (studentid) => {
         try {
             const data = await getDocs(this.coursesCollection)
@@ -234,38 +276,37 @@ export default class AppStorage {
                 }
             }
 
-            this.coursesListWithWaitingStudent = filteredData2
+            this.setCoursesListWithWaitingStudent(filteredData2)
+
         } catch (err) {
             console.error(err)
         }
     }
 
-    // upload plików
 
-    files = ""
-    isFile = false
+    // ########################## FILES ##########################
+    files = ''
+    setFiles = (data) => {
+        this.files = data
+    }
 
     onChangeFile = (e) => {
 
-        console.log("zmieniam plik")
-
+        console.log("Zmieniam plik")
         if (e.target.files && e.target.files.length > 0) {
-            this.files = e.target.files
-            this.isFile = true
-        }
-        else {
-            this.isFile = false
+            this.setFiles(e.target.files)
         }
         console.log(this.files)
 
     }
 
-    handleSubmitFilesButton = async () => {
+    // upload plików
+    submitFiles = async () => {
 
         try {
 
             if (this.files.length == 0) { // jeśli nie ma żadnych plików
-                throw new Error("No files included!")
+                throw new Error("Brak plików!")
             }
 
             const url = new URL(this.apiHost)
@@ -279,12 +320,12 @@ export default class AppStorage {
             for (let i = 0; i < this.files.length; i++) {
 
                 const file = this.files[i];
-                console.log("file ", i, " ", file)
+                console.log("file:", i, ":", file)
 
                 const formData = new FormData();
                 formData.append("_IFormFile", file)
 
-                console.log("wysyłam plik do API") // wysyłamy pojedyńczo
+                console.log("Wysyłam plik do API") // wysyłamy pojedyńczo
                 axios
                     .post(url, formData)
                     .then((response) => { // 2xx
@@ -296,10 +337,10 @@ export default class AppStorage {
 
                         if (numOfFilesUploaded == this.files.length) { // jeśli wszystkie wysłane
                             alert("Przesłano pliki.")
-                            console.log("przesłano pliki")
-                            console.log("czyszcze zmienną")
+                            console.log("Rrzesłano pliki")
+                            console.log("Czyszcze zmienną")
                             this.files = ""
-                            console.log("czyszcze input")
+                            console.log("Czyszcze input")
                             document.getElementById("filesUpload").value = ""
                         }
 
@@ -317,18 +358,30 @@ export default class AppStorage {
                         alert("Nie udało się przesłać pliku")
                     })
             }
-
         }
         catch (err) {
-
             console.log("err: ", err)
             alert("Nie udało się przetworzyć i wysłać plików. ", err)
-
         }
 
     }
 
+    // ########################## DEBUG ##########################
 
+    showRoles = async () => {
+        const q = query(this.rolesCollection, where("role", "!=", " "))
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            console.log(doc.id, " => ", doc.data());
+        });
+    }
+
+    showMapVariableIDsPlus = (variable) => {
+        variable.map(x => (
+            console.log("- ", x.id, x.courseName)
+        ))
+    }
 
 
 }
+

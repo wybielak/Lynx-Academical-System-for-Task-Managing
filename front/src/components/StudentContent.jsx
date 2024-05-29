@@ -4,9 +4,8 @@ import { observer } from 'mobx-react-lite'
 import { auth } from '../config/FirebaseConfig'
 import { useStore } from '../mobx/Store'
 import StudentUploadPanel from './StudentUploadPanel'
-import CourseJoin from './CourseJoin'
-import LogOutButton from './LogOutButton'
 import Header from './Header'
+import CourseJoin from './CourseJoin'
 
 export default observer(function StudentContent() {
 
@@ -15,16 +14,13 @@ export default observer(function StudentContent() {
     return (
         <>
             <div className='student-content content'>
-                <Header role='Student' userName={auth?.currentUser?.email} />
-                <CourseJoin />
-                
-                <div>Kurs [X]</div>
-                <br></br>
-                <div>Zadanie [Y]</div>
-                <br></br>
-                <div><StudentUploadPanel /></div>
 
-                <LogOutButton />
+                <Header role='Student' userName={auth?.currentUser?.email} />
+
+                <CourseJoin />
+
+                <StudentUploadPanel />
+
             </div>
         </>
     )
