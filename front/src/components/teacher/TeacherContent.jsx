@@ -2,12 +2,12 @@ import React from 'react'
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { auth } from '../config/FirebaseConfig'
-import { useStore } from '../mobx/Store'
+import { auth } from '../../config/FirebaseConfig'
+import { useStore } from '../../mobx/Store'
 import AddUser from './AddUser'
 import AddCourse from './AddCourse'
 import TeacherCoursesList from './TeacherCoursesList'
-import Header from './Header'
+import Header from '../Header'
 
 export default observer(function TeacherContent() {
 
