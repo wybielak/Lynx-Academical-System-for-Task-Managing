@@ -136,6 +136,7 @@ export default class AppStorage {
             alert("Utworzono kurs")
             console.log("Czyszcze zmienną")
             this.setNewCourseName('')
+            this.getMyCourses() // ANCHOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             // console.log("czyszcze input")
             // document.getElementById("filesUpload").value = ""
         })
@@ -151,7 +152,7 @@ export default class AppStorage {
         console.log("Czyszcze kursy")
     }
 
-    // wylistowanie swoich kursów
+    // wylistowanie swoich kursów - nauczyciel
     getMyCourses = async () => {
         console.log("Pobieram moje kursy")
         try {
@@ -166,13 +167,12 @@ export default class AppStorage {
         }
     }
 
-    // pobieranie kursów z możliwością dołączenia #w
     setCoursesListWithoutStudent = (coursesData) => {
         this.coursesListWithoutStudent = coursesData
         console.log("Ustawiono zmienną setCoursesListWithoutStudent")
     }
 
-    // pobieranie kursów z możliwością dołączenia #w #TODO refractor
+    // pobieranie kursów z możliwością dołączenia - student
     getCoursesListWithoutStudent = async (studentid) => {
         try {
             const data = await getDocs(this.coursesCollection)
@@ -211,7 +211,7 @@ export default class AppStorage {
         }
     }
 
-    // pobieranie kursów z możliwością dołączenia #w
+    // dołączanie do wybranego kursu - student
     addWaitingStudentToCourse = async (courseid, studentid) => {
         try {
 
@@ -254,13 +254,12 @@ export default class AppStorage {
         }
     }
 
-    // pobieranie kursów z możliwością dołączenia #w
     setCoursesListWithWaitingStudent = (coursesData) => {
         this.coursesListWithWaitingStudent = coursesData
         console.log("Ustawiono zmienną coursesListWithWaitingStudent")
     }
 
-    // pobieranie kursów z możliwością dołączenia #w
+    // pobieranie kursów w których jest oczekujący - student
     getCoursesListWithWaitingStudent = async (studentid) => {
         try {
             const data = await getDocs(this.coursesCollection)
