@@ -41,6 +41,17 @@ export default class AppStorage {
         console.log("currentRole:", this.currentRole)
     }
 
+    getNameById = async (id) => {
+        try {
+            const roleQuery = query(this.rolesCollection, where("userId", "==", id))
+            const data = await getDocs(roleQuery)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
+            return filteredData[0].name
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
 
     // ########################## USER #######################
 
@@ -71,7 +82,7 @@ export default class AppStorage {
         try {
             createUserWithEmailAndPassword(auth, this.newUserEmail, this.newUserPassword)
                 .then((createdUser) => {
-                    addDoc(this.rolesCollection, { userId: createdUser.user.uid, role: this.newUserRole })
+                    addDoc(this.rolesCollection, { userId: createdUser.user.uid, name: createdUser.user.email, role: this.newUserRole })
                     console.log("Utworzono nowego użytkownika")
                 })
         } catch (err) {
