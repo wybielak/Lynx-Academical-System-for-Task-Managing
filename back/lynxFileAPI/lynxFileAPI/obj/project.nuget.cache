@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "VJtOUmoP+Y0IaG2qN7Mf/Pxu1/DS3ydOQTO+RrWKtcmUWZu2X/56oKkURDDTsuGyKMSQms87MdksA2u6eTi1tA==",
+  "dgSpecHash": "88ZhpwXV7531TlGECKzRlgwRUh/L+NEWe9yfa1IeDpoHoJTxU1yY1KOtSl4XIAG5KyY2tXuTQYsGJsXD4ANYHQ==",
   "success": true,
-  "projectFilePath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testing\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+  "projectFilePath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testowanie\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\PC\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
