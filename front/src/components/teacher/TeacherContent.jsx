@@ -8,6 +8,7 @@ import AddUser from './AddUser'
 import AddCourse from './AddCourse'
 import TeacherCoursesList from './TeacherCoursesList'
 import Header from '../Header'
+import TeacherCoursePanel from './TeacherCoursePanel'
 
 export default observer(function TeacherContent() {
 
@@ -28,7 +29,12 @@ export default observer(function TeacherContent() {
                 <Header role='Teacher' userName={auth?.currentUser?.email} />
 
                 <TeacherCoursesList />
-            
+
+                {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id &&
+                    //TODO przenoszenie na stronę kursu
+                    <TeacherCoursePanel />
+                }
+
                 <AddCourse />
 
                 <AddUser />

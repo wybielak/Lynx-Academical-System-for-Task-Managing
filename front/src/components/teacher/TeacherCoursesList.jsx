@@ -14,17 +14,14 @@ export default observer(function TeacherCoursesList() {
         <>
             <h1>Your courses</h1>
 
-            <div>
+            <div className='courses-accept'>
                 {appStorage.myCourses.map(course => (
-                    <div key={course.id}>
-
-                        - {course.courseName} <button onClick={() => appStorage.handleSelectedCourseId(course.id)}>Przejdź</button>
-
-                        {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id == course.id &&
+                    <div className='courses-accept-info' key={course.id}>
+                        <h3>{course.courseName}</h3> <button onClick={() => appStorage.handleSelectedCourseId(course.id)}>Przejdź</button>
+                        {/* {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id == course.id &&
                             //TODO przenoszenie na stronę kursu
                             <TeacherCoursePanel />
-                        }
-
+                        } */}
                     </div>
                 ))}
             </div>

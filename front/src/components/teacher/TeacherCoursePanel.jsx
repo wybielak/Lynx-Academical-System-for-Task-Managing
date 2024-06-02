@@ -22,25 +22,27 @@ export default observer(function TeacherCoursePanel() {
 
                 {/* <Header role='Teacher' userName={auth?.currentUser?.email} /> */}
 
+                <h1>Podgląd kursu</h1>
                 <h2> {appStorage.selectedCourseFull.courseName} </h2>
-                <p> zadania </p>
+                <h3> Zadania </h3>
 
                 <h3> Oczekujący studenci </h3>
                 {appStorage.selectedCourseFull.waitingStudentsIds && appStorage.selectedCourseFull.waitingStudentsIds.length > 0 &&
                     <div>
 
                         {appStorage.selectedCourseFull.waitingStudentsIds.map((id) => (
-                            <div key={id}>
+                            <div className="student-info" key={id}>
 
                                 {/* {console.log("byId:", appStorage.getStudentById(id))} */}
                                 {/* * {id} */}
-                                {appStorage.myStudentsWithData.map((student) => {
-                                    if (student.userId == id) {
-                                        // console.log("returning", student.name)
-                                        return student.name
-                                    }
-                                })}
-
+                                <p>
+                                    {appStorage.myStudentsWithData.map((student) => {
+                                        if (student.userId == id) {
+                                            // console.log("returning", student.name)
+                                            return student.name
+                                        }
+                                    })}
+                                </p>
                                 <button onClick={() => appStorage.addStudentToCourse(appStorage.selectedCourseFull, id)}>Zatwierdź</button>
 
                             </div>
@@ -54,7 +56,7 @@ export default observer(function TeacherCoursePanel() {
                     <div>
 
                         {appStorage.selectedCourseFull.studentsIds.map((id) => (
-                            <div key={id}>
+                            <div className="student-added" key={id}>
 
                                 {/* * {id} */}
                                 {appStorage.myStudentsWithData.map((student) => {

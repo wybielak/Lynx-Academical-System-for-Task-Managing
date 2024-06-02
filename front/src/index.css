@@ -185,7 +185,7 @@ body, .main-container {
     height: 50px;
 }
 
-.create-user-main {
+.create-user-main, .create-new-course {
     width: fit-content;
     align-self: center;
     display: flex;
@@ -193,17 +193,17 @@ body, .main-container {
     flex-wrap: nowrap;
 }
 
-.create-user-main h1 {
+.create-user-main h1, .create-new-course h1 {
     text-align: center;
 }
 
-.create-user-main form {
+.create-user-main form, .create-new-course form {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
 }
 
-.create-user-main form div {
+.create-user-main form div, .create-new-course form div  {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -216,11 +216,21 @@ body, .main-container {
     font-weight: bold;
 }
 
-.create-user-main form div input {
+.create-new-course form div label {
+    width: 120px;
+    font-weight: bold;
+}
+
+.create-user-main form div input{
     padding: 5px;
 }
 
-.create-user-main button {
+.create-new-course form div input {
+    padding: 5px;
+    width: 200px;
+}
+
+.create-user-main button, .create-new-course button {
     width: 150px;
     align-self: center;
     font-size: 1.2rem;
@@ -233,13 +243,13 @@ body, .main-container {
     transition: .1s;
 }
 
-.create-user-main button:hover {
+.create-user-main button:hover, .create-new-course button:hover {
     cursor: pointer;
     border-top-left-radius: 25px;
     border-bottom-right-radius: 25px;
 }
 
-.course-join-info {
+.course-join-info, .courses-accept-info {
     min-width: 600px;
     display: flex;
     flex-direction: row;
@@ -252,7 +262,7 @@ body, .main-container {
     margin: 10px 0;
 }
 
-.course-join-info h3 {
+.course-join-info h3, .courses-accept-info h3 {
     margin: 5px 0;
     margin-right: 50px;
 }
@@ -261,7 +271,7 @@ body, .main-container {
     margin: 5px 0;
 }
 
-.course-join-info button {
+.course-join-info button, .courses-accept-info button {
     align-self: center;
     padding: 10px 15px;
     background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
@@ -272,11 +282,50 @@ body, .main-container {
     transition: .1s;
 }
 
-.course-join-info button:hover {
+.course-join-info button:hover, .courses-accept-info button:hover {
     cursor: pointer;
     scale: 1.1;
 }
 
+.teacher-content .course {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.teacher-content .course .student-info {
+    display: flex;
+    border: 1px solid var(--darkGray1);
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.teacher-content .course .student-info p {
+    margin: 0;
+    margin-right: 20px;
+}
+
+.teacher-content .course .student-info button {
+    align-self: center;
+    padding: 5px 10px;
+    background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
+    color: var(--lightGray1);
+    outline: none;
+    border: none;
+    border-radius: 10px;
+    transition: .1s;
+}
+
+.teacher-content .course .student-info button:hover {
+    cursor: pointer;
+    scale: 1.1;
+}
+
+.teacher-content .course .student-added {
+    font-weight: bold;
+}
 
 /* .content {
     background-color: var(--lightGray2);
@@ -287,9 +336,9 @@ body, .main-container {
 } 
 */
 
-.course {
+/* .course {
     background-color: var(--lightGray2);
-}
+} */
 
 
 
