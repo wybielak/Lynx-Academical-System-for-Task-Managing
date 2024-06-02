@@ -3,8 +3,9 @@ import axios from 'axios';                  // i zewnetrzne
 import { setPersistence, signOut } from 'firebase/auth'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { addDoc, doc, setDoc, updateDoc } from 'firebase/firestore'
+import { addDoc, doc, setDoc } from 'firebase/firestore'
 import { getDocs, collection, query, where } from 'firebase/firestore'
+import { updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 import { db } from '../config/FirebaseConfig'   // potem te "nasze"
 import { auth } from '../config/FirebaseConfig'
@@ -24,6 +25,11 @@ export default class AppStorage {
     rolesCollection = collection(db, 'roles')
     currentRole = ''
 
+    setCurrentRole = (role) => { // żeby nie było WARRNINGÓW i ERRORÓW (w <React.StrictMode>) takie rzeczy jak set'owanie tych "stanów" musi być osobną funkcją albo być z dekoratorem @action
+        this.currentRole = role
+        console.log("currentRole:", this.currentRole)
+    }
+
     // pobieranie roli uzytkownikow z bazy
     getRoles = async () => {
         try {
@@ -36,9 +42,15 @@ export default class AppStorage {
         }
     }
 
-    setCurrentRole = (role) => { // żeby nie było WARRNINGÓW i ERRORÓW (w <React.StrictMode>) takie rzeczy jak set'owanie tych "stanów" musi być osobną funkcją albo być z dekoratorem @action
-        this.currentRole = role
-        console.log("currentRole:", this.currentRole)
+    getNameById = async (id) => {
+        try {
+            const roleQuery = query(this.rolesCollection, where("userId", "==", id))
+            const data = await getDocs(roleQuery)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
+            return filteredData[0].name
+        } catch (err) {
+            console.log(err)
+        }
     }
 
 
@@ -49,6 +61,7 @@ export default class AppStorage {
     newUserRole = 'student' // #hardcoded
     newUserEmail = ''
     newUserPassword = ''
+    myStudentsWithData = []
 
     setNewUserEmail = (v) => {
         this.newUserEmail = v
@@ -71,7 +84,7 @@ export default class AppStorage {
         try {
             createUserWithEmailAndPassword(auth, this.newUserEmail, this.newUserPassword)
                 .then((createdUser) => {
-                    addDoc(this.rolesCollection, { userId: createdUser.user.uid, role: this.newUserRole })
+                    addDoc(this.rolesCollection, { userId: createdUser.user.uid, name: createdUser.user.email, role: this.newUserRole })
                     console.log("Utworzono nowego użytkownika")
                 })
         } catch (err) {
@@ -109,6 +122,23 @@ export default class AppStorage {
         }
     }
 
+    // ustawienie studentów (id, nazwa, ...)
+    setMyStudentsWithData = (data) => {
+        this.myStudentsWithData = data
+        console.log("myStudentsWithData:")
+        this.showMapVariableIDsPlus(this.myStudentsWithData)
+    }
+
+    // getStudentById = (id) => {
+    //     this.myStudentsWithData.map((student) => {
+    //         // console.log(student.userId, "=?=", id, student.userId == id)
+    //         if (student.userId == id) {
+    //             console.log("returning", student.name)
+    //             return student.name
+    //         }
+    //     })
+    // }
+
 
     // ########################## KURSY ##########################
 
@@ -117,6 +147,7 @@ export default class AppStorage {
     coursesListWithoutStudent = [] // #w
     coursesListWithWaitingStudent = [] // #w
     newCourseName = ''
+    selectedCourseFull = ''
 
     setNewCourseName = (name) => {
         this.newCourseName = name
@@ -128,7 +159,7 @@ export default class AppStorage {
         const docRef = await addDoc(collection(db, "courses"), { // #TODO refractor
             courseName: this.newCourseName,
             ownerId: auth.currentUser.uid,
-            ownerName: auth.currentUser.email,
+            // ownerName: auth.currentUser.email,
             studentsIds: [],
             waitingStudentsIds: [],
         }).then((res) => {
@@ -136,7 +167,7 @@ export default class AppStorage {
             alert("Utworzono kurs")
             console.log("Czyszcze zmienną")
             this.setNewCourseName('')
-            this.getMyCourses() // ANCHOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            this.getMyCourses() // ANCHOR !
             // console.log("czyszcze input")
             // document.getElementById("filesUpload").value = ""
         })
@@ -144,12 +175,8 @@ export default class AppStorage {
 
     setMyCourses = (coursesData) => {
         this.myCourses = coursesData
-        console.log("Ustawiono zmienną myCourses")
-    }
-
-    clearMyCourses = () => {
-        this.myCourses = []
-        console.log("Czyszcze kursy")
+        console.log("myCourses:")
+        this.showMapVariableIDsPlus(this.myCourses)
     }
 
     // wylistowanie swoich kursów - nauczyciel
@@ -159,9 +186,8 @@ export default class AppStorage {
             var tmp = [] // może się przydać do czyszczenia stanu (jakby się coś zaczęło kiepścić)
             const courseQuery = query(this.coursesCollection, where("ownerId", "==", auth?.currentUser?.uid))
             const data = await getDocs(courseQuery)
-            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
             this.setMyCourses(filteredData)
-            this.showMapVariableIDsPlus(this.myCourses)
         } catch (err) {
             console.log(err)
         }
@@ -277,9 +303,69 @@ export default class AppStorage {
             }
 
             this.setCoursesListWithWaitingStudent(filteredData2)
+            console.log(filteredData2)
 
         } catch (err) {
             console.error(err)
+        }
+    }
+
+    // wybór kursu 
+    setSelectedCourseFull = (id) => {
+        // this.clearSelectedCourse()
+        this.myCourses.map((course) => {
+            if (course.id == id) {
+                this.selectedCourseFull = course
+            }
+        })
+        console.log("selectedCourse:", this.selectedCourseFull)
+    }
+
+    clearSelectedCourse = () => {
+        console.log("czyszczę wybrany kurs")
+        this.selectedCourseFull = ''
+        // this.waitingStudentsInCourse = []
+        // this.studentsInCourse = []
+    }
+
+    handleSelectedCourseId = (courseId) => {
+        this.setSelectedCourseFull(courseId) // tymczasowo tak tylko tyle
+    }
+
+    addStudentToCourse = async (course, studentId) => {
+
+        console.log("dodaję..", course.id, studentId)
+        const courseRef = doc(db, "courses", course.id)
+
+        await updateDoc(courseRef, {
+            studentsIds: arrayUnion(studentId),
+            waitingStudentsIds: arrayRemove(studentId)
+        }).then(async () => {
+            // dla odświeżenia
+            await this.getMyCourses()
+        }).then(() => {
+            return this.setSelectedCourseFull(course.id)
+        })
+        alert("Dodano")
+    }
+
+    // pobranie danych od studentach (id, nazwa, ...), który należą (lub chcą należeć) do wybranego kursu - nauczyciel
+    loadAllStudentsDataInCourse = async () => {
+        try {
+            const allIds = this.selectedCourseFull.studentsIds.concat(this.selectedCourseFull.waitingStudentsIds)
+            // console.log("allIds:", allIds)
+            if (allIds.length > 0) {
+                var students = []
+                const studentsWithData = query(this.rolesCollection, where("userId", "in", allIds));
+                const querySnapshot = await getDocs(studentsWithData)
+                querySnapshot.forEach((doc) => {
+                    // console.log("student:", doc.id, ' ', doc.data())
+                    students.push(doc.data()) // role: , name: , userId: 
+                })
+                this.setMyStudentsWithData(students)
+            }
+        } catch (err) {
+            console.log(err)
         }
     }
 
@@ -378,7 +464,7 @@ export default class AppStorage {
 
     showMapVariableIDsPlus = (variable) => {
         variable.map(x => (
-            console.log("- ", x.id, x.courseName)
+            console.log("- ", x.id, x.courseName, x.userId, x.name)
         ))
     }
 

@@ -1,0 +1,29 @@
+foldery na komponenty: /student /teacher
+
+
+TeacherContent: 
+<Header>
+<TeacherCoursesList>: 
+  myCourses.map()
+   handleSelectedCourseId(course.id) 
+   setSelectedCourseFull(id)
+  -> <TeacherCoursePanel>
+<AddCourse>
+<AddUser>
+
+
+TeacherCoursePanel:
+useEffect:
+ loadAllStudentsDataInCourse() - używa "selectedCourseFull"
+  getDocs("allIds")
+  setMyStudentsWithData(data)
+
+selectedCourseFull.waitingStudentsIds.map()
+ myStudentsWithData.map() - do wyciągania nazwy studenta
+  addStudentToCourse(course, studentId)
+
+selectedCourseFull.studentsIds.map()
+ myStudentsWithData.map() - do wyciągania nazwy studenta
+
+
+

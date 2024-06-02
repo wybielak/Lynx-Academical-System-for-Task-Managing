@@ -284,4 +284,12 @@ body, .main-container {
 
 .uploadPanel {
     background-color: var(--lightGray3);
-} */
+} 
+*/
+
+.course {
+    background-color: var(--lightGray2);
+}
+
+
+

@@ -4,8 +4,8 @@ import { observer } from 'mobx-react-lite'
 
 import { auth } from '../config/FirebaseConfig'
 import { useStore } from '../mobx/Store'
-import StudentContent from './StudentContent';
-import TeacherContent from './TeacherContent';
+import StudentContent from './student/StudentContent';
+import TeacherContent from './teacher/TeacherContent';
 import LogOutButton from './LogOutButton';
 import { db } from '../config/FirebaseConfig'
 import { getDocs, collection, query, where } from 'firebase/firestore'
