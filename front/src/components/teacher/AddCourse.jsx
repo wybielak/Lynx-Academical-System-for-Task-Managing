@@ -9,25 +9,24 @@ export default observer(function AddCourse() {
 
     return (
         <>
-            <div>
+            <div className='create-new-course'>
 
                 <h1>Create new course</h1>
 
                 <form>
+                    <div>
+                        <label>Course name </label>
 
-                    {/* TODO CSS */}
-                    <label>Nazwa kursu </label>
-
-                    <input type="text" value={appStorage.newCourseName}
-                        onChange={(e) => { appStorage.setNewCourseName(e.target.value) }}
-                        onKeyDown={async (event) => {
-                            if (event.key === 'Enter') {
-                                appStorage.createNewCourse()
-                            }
-                        }}
-                    />
-
-                    <button type="button" onClick={appStorage.createNewCourse}>Stwórz</button>
+                        <input type="text" value={appStorage.newCourseName}
+                            onChange={(e) => { appStorage.setNewCourseName(e.target.value) }}
+                            onKeyDown={async (event) => {
+                                if (event.key === 'Enter') {
+                                    appStorage.createNewCourse()
+                                }
+                            }}
+                        />
+                    </div>
+                    <button type="button" onClick={appStorage.createNewCourse}>Create</button>
 
                 </form>
 

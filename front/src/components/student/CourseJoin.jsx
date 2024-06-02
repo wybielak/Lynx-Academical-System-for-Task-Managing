@@ -19,7 +19,7 @@ export default observer(function CourseJoin() {
             <div className='course-join'>
                 <h1>Dołącz do kursu</h1>
                 {appStorage.coursesListWithoutStudent.map((course, index) => (
-                    <SingeCourse key={index} courseId={course.id} courseName={course.courseName} ownerId={course.ownerId} buttonDisplay={''} />
+                    <SingeCourse key={index} courseId={course.id} courseName={course.courseName} ownerId={course.ownerId} button1Display={''} button2Display={'none'} />
                     // <div className='course-join-info' key={index}>
                     //     <div>
                     //         <h3>{course.courseName}</h3>
@@ -33,7 +33,7 @@ export default observer(function CourseJoin() {
 
                 <h1>Oczekujesz na dołączenie</h1>
                 {appStorage.coursesListWithWaitingStudent.map((course, index) => (
-                    <SingeCourse key={index} courseId={course.id} courseName={course.courseName} ownerId={course.ownerId} buttonDisplay={'none'} />
+                    <SingeCourse key={index} courseId={course.id} courseName={course.courseName} ownerId={course.ownerId} button1Display={'none'} button2Display={'none'} />
                     // <div className='course-join-info' key={index}>
                     //     <div>
                     //         <h3>{course.courseName}</h3>

@@ -1,8 +1,6 @@
-import React from 'react'
-import { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { auth } from '../../config/FirebaseConfig'
 import { useStore } from '../../mobx/Store'
 import TeacherCoursePanel from './TeacherCoursePanel';
 
@@ -10,15 +8,21 @@ export default observer(function TeacherCoursesList() {
 
     const { appStorage } = useStore();
 
+    useEffect(() => {
+        appStorage.clearSelectedCourse()
+    }, [])
+
     return (
         <>
             <h1>Your courses</h1>
 
-            <div>
-                {appStorage.myCourses.map(course => (
-                    <div key={course.id}>
+            <div className='courses-accept'>
 
-                        - {course.courseName} <button onClick={() => appStorage.handleSelectedCourse(course.id)}>Przejdź</button>
+                {appStorage.myCourses.map(course => (
+                    <div className='courses-accept-info' key={course.id}>
+
+                        <h3>{course.courseName}</h3>
+                        <button onClick={() => appStorage.handleSelectedCourse(course.id)}>Przejdź</button>
 
                         {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id == course.id &&
                             //TODO przenoszenie na stronę kursu
@@ -27,6 +31,7 @@ export default observer(function TeacherCoursesList() {
 
                     </div>
                 ))}
+
             </div>
 
         </>

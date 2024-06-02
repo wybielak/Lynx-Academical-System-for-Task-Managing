@@ -41,9 +41,15 @@ export default class UploadStorage {
         this.courseTasks.map((task) => {
             if (task.id == taskId) {
                 this.selectedTaskFull = task
+                console.log("selectedTask:", this.selectedTaskFull)
+                return
             }
         })
-        console.log("selectedTask:", this.selectedTaskFull)
+    }
+
+    clearSelectedTaskFull = () => {
+        console.log("czyszczę wybraność zadania")
+        this.selectedTaskFull = null
     }
 
     handleSelectedTask = (taskId) => {

@@ -10,6 +10,7 @@ export default observer(function TeacherTaskPanel() {
     const { appStorage } = useStore();
     const { uploadStorage } = useStore();
 
+
     return (
         <>
             <div className='teacher-content task'>
@@ -22,11 +23,13 @@ export default observer(function TeacherTaskPanel() {
                 <h3> Przesłali: </h3>
                 {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.map((studentId) => (
                     <div key={studentId}>
+
                         {appStorage.myStudentsWithData.map((student) => {
                             if (student.userId == studentId) {
                                 return student.name
                             }
                         })}
+
                     </div>
                 ))}
 

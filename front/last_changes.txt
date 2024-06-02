@@ -1,12 +1,16 @@
-u nauczyciela: 
- modyfikacja <TeacherCoursePanel>:
-  dodanie <TeacherTaskPanel>:
-   wyświetlanie zadań
-   i sprawdzanie kto przesłał
+#merge
 
-mobx storage:
- dodanie zależności w konstruktorze uploadStorage
- żeby moża było tam korzystać z rzeczy z appStorage
+import z najnowszego mastera + quickfix
 
+u studenta:
+ wyświetlanie, w którym kursie jest student
+ setCoursesListWithStudent(coursesData) (nowe)
+ getCoursesListWithStudent(stuedntid) (nowe)
+ getCurrentCourseData(id) (nowe)
+ <StudentMyCourses> (nowe)
+
+u nauczyciela:
+ CSS
+ clearSelectedTaskFull() 
 
 

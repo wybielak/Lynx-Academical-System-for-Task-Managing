@@ -141,6 +141,7 @@ export default class AppStorage {
     myCourses = [] // #TODO trzeba to jakoś lepiej ogarnąć/ujednolicić 
     coursesListWithoutStudent = [] // #w
     coursesListWithWaitingStudent = [] // #w
+    coursesListWithStudent = [] // #w
     newCourseName = ''
     selectedCourseFull = ''
 
@@ -232,6 +233,46 @@ export default class AppStorage {
         }
     }
 
+    setCoursesListWithStudent = (coursesData) => {
+        this.coursesListWithStudent = coursesData
+        console.log("Ustawiono zmienną setCoursesListWithStudent")
+    }
+
+    // pobieranie kursów w których jest - student
+    getCoursesListWithStudent = async (studentid) => {
+        try {
+            const data = await getDocs(this.coursesCollection)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+            var filteredData2 = []
+
+            for (var i = 0; i < filteredData.length; i++) {
+                if (filteredData[i].studentsIds) {
+                    if (filteredData[i].studentsIds.includes(studentid)) {
+                        filteredData2.push(filteredData[i])
+                        continue
+                    }
+                }
+            }
+
+            this.setCoursesListWithStudent(filteredData2)
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    getCurrentCourseData = (id) => {  // TODO
+        // this.clearSelectedCourse()
+        this.coursesListWithStudent.map((course) => {
+            if (course.id == id) {
+                //this.selectedCourseFull = course
+                console.log(course.courseName)
+            }
+        })
+        //console.log("selectedCourse:", this.selectedCourseFull)
+    }
+
     // dołączanie do wybranego kursu - student
     addWaitingStudentToCourse = async (courseid, studentid) => {
         try {
@@ -316,11 +357,9 @@ export default class AppStorage {
         console.log("selectedCourse:", this.selectedCourseFull)
     }
 
-    clearSelectedCourse = () => {
-        console.log("czyszczę wybrany kurs")
-        this.selectedCourseFull = ''
-        // this.waitingStudentsInCourse = []
-        // this.studentsInCourse = []
+    clearSelectedCourse = () => { //NOTE - do poprawienia/sprawdzenia czy działa prz przełączaniu między stronami
+        console.log("czyszczę wybraność kursu")
+        this.selectedCourseFull = null
     }
 
     handleSelectedCourse = (courseId) => {

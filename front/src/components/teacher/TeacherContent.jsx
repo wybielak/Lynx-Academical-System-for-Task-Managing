@@ -7,6 +7,7 @@ import { useStore } from '../../mobx/Store'
 import AddUser from './AddUser'
 import AddCourse from './AddCourse'
 import TeacherCoursesList from './TeacherCoursesList'
+import TeacherCoursePanel from './TeacherCoursePanel'
 import Header from '../Header'
 
 export default observer(function TeacherContent() {
@@ -28,7 +29,12 @@ export default observer(function TeacherContent() {
                 <Header role='Teacher' userName={auth?.currentUser?.email} />
 
                 <TeacherCoursesList />
-            
+
+                {/* {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id && //NOTE 
+                    //TODO przenoszenie na osobną stronę kursu
+                    <TeacherCoursePanel />
+                } */}
+
                 <AddCourse />
 
                 <AddUser />

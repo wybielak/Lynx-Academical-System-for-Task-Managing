@@ -14,6 +14,7 @@ export default observer(function TeacherCoursePanel() {
     useEffect(() => {
         appStorage.loadAllStudentsDataInCourse()
         uploadStorage.getCourseTasks()
+        uploadStorage.clearSelectedTaskFull()
     }, [])
 
     return (
@@ -22,20 +23,21 @@ export default observer(function TeacherCoursePanel() {
 
                 {/* <Header role='Teacher' userName={auth?.currentUser?.email} /> */}
 
+                <h1>Podgląd kursu</h1>
                 <h2> {appStorage.selectedCourseFull.courseName} </h2>
-                <h3> Zadania: </h3>
+                <h3> Zadania </h3>
                 {uploadStorage.courseTasks && uploadStorage.courseTasks.length > 0 &&
                     <div>
 
                         {uploadStorage.courseTasks.map((task) => (
-                            <div key={task.id}>
+                            <div className="student-info" key={task.id}>
 
                                 {task.taskName}
 
                                 <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button>
 
                                 {uploadStorage.selectedTaskFull && uploadStorage.selectedTaskFull.id == task.id &&
-                                    //TODO przenoszenie na stronę zadania
+                                    //TODO przenoszenie na osobną stronę zadania
                                     <TeacherTaskPanel />
                                 }
 
@@ -50,17 +52,15 @@ export default observer(function TeacherCoursePanel() {
                     <div>
 
                         {appStorage.selectedCourseFull.waitingStudentsIds.map((id) => (
-                            <div key={id}>
+                            <div className="student-info" key={id}>
 
-                                {/* {console.log("byId:", appStorage.getStudentById(id))} */}
-                                {/* * {id} */}
-                                {appStorage.myStudentsWithData.map((student) => {
-                                    if (student.userId == id) { // mapowanie id na nazwe studenta
-                                        // console.log("returning", student.name)
-                                        return student.name
-                                    }
-                                })}
-
+                                <p>
+                                    {appStorage.myStudentsWithData.map((student) => {
+                                        if (student.userId == id) { // mapowanie id na nazwe studenta
+                                            return student.name
+                                        }
+                                    })}
+                                </p>
                                 <button onClick={() => appStorage.addStudentToCourse(appStorage.selectedCourseFull, id)}>Zatwierdź</button>
 
                             </div>
@@ -74,12 +74,10 @@ export default observer(function TeacherCoursePanel() {
                     <div>
 
                         {appStorage.selectedCourseFull.studentsIds.map((id) => (
-                            <div key={id}>
+                            <div className="student-info" key={id}>
 
-                                {/* * {id} */}
                                 {appStorage.myStudentsWithData.map((student) => {
-                                    if (student.userId == id) {
-                                        // console.log("returning", student.name)
+                                    if (student.userId == id) { // mapowanie id na nazwe studenta
                                         return student.name
                                     }
                                 })}
