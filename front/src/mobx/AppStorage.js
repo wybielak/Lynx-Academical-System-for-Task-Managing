@@ -277,7 +277,7 @@ export default class AppStorage {
         }
     }
 
-    getCurrentCourseData = (id) => {
+    getCurrentCourseData = (id) => {  // TODO
         // this.clearSelectedCourse()
         this.coursesListWithStudent.map((course) => {
             if (course.id == id) {
