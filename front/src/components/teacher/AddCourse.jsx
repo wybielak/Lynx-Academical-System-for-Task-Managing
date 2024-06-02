@@ -14,7 +14,10 @@ export default observer(function AddCourse() {
                 <h1>Create new course</h1>
 
                 <form>
+
+                    {/* TODO CSS */}
                     <label>Nazwa kursu </label>
+
                     <input type="text" value={appStorage.newCourseName}
                         onChange={(e) => { appStorage.setNewCourseName(e.target.value) }}
                         onKeyDown={async (event) => {
@@ -23,12 +26,11 @@ export default observer(function AddCourse() {
                             }
                         }}
                     />
-                </form>
-                <div>
-                    <button type="button" onClick={appStorage.createNewCourse}>Stwórz</button>
-                </div>
 
-                [#TODO css]
+                    <button type="button" onClick={appStorage.createNewCourse}>Stwórz</button>
+
+                </form>
+
 
             </div>
         </>

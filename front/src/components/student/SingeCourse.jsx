@@ -3,7 +3,7 @@ import { auth } from '../../config/FirebaseConfig';
 import { useStore } from '../../mobx/Store';
 import { observer } from 'mobx-react-lite';
 
-export default observer(function SingeCourse({ courseId, courseName, ownerId, buttonDisplay}) {
+export default observer(function SingeCourse({ courseId, courseName, ownerId, buttonDisplay }) {
 
     const { appStorage } = useStore();
 
@@ -25,7 +25,7 @@ export default observer(function SingeCourse({ courseId, courseName, ownerId, bu
                     <h3>{courseName}</h3>
                     {ownerNameLoading ? <p>{ownerName}</p> : <p>Ładowanie ...</p>}
                 </div>
-                <button style={{display: buttonDisplay}} onClick={() => appStorage.addWaitingStudentToCourse(courseId, auth?.currentUser?.uid)}>Dołącz</button>
+                <button style={{ display: buttonDisplay }} onClick={() => appStorage.addWaitingStudentToCourse(courseId, auth?.currentUser?.uid)}>Dołącz</button>
             </div>
         </>
     )

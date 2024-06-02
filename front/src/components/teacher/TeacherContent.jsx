@@ -28,7 +28,7 @@ export default observer(function TeacherContent() {
                 <Header role='Teacher' userName={auth?.currentUser?.email} />
 
                 <TeacherCoursesList />
-
+            
                 <AddCourse />
 
                 <AddUser />

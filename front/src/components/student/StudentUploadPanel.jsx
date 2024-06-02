@@ -1,12 +1,11 @@
 import React from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { auth } from '../../config/FirebaseConfig'
 import { useStore } from '../../mobx/Store'
 
 export default observer(function StudentUploadPanel() {
 
-    const { appStorage } = useStore();
+    const { uploadStorage } = useStore();
 
     return (
         <>
@@ -20,8 +19,8 @@ export default observer(function StudentUploadPanel() {
                 <br></br>
 
                 <div>
-                    <input type='file' multiple id="filesUpload" onChange={(e) => appStorage.onChangeFile(e)} />
-                    <button onClick={appStorage.submitFiles}>Prześlij</button>
+                    <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
+                    <button onClick={uploadStorage.submitFiles}>Prześlij</button>
                 </div>
 
             </div>

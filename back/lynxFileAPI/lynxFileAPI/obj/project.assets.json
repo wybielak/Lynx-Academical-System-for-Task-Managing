@@ -433,11 +433,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testing\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+      "projectUniqueName": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testowanie\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
       "projectName": "lynxFileAPI",
-      "projectPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testing\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+      "projectPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testowanie\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
       "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testing\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
+      "outputPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-testowanie\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
