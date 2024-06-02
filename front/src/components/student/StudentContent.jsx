@@ -6,6 +6,7 @@ import { useStore } from '../../mobx/Store'
 import StudentUploadPanel from './StudentUploadPanel'
 import Header from '../Header'
 import CourseJoin from './CourseJoin'
+import StudentMyCourses from './StudentMyCourses'
 
 export default observer(function StudentContent() {
 
@@ -19,6 +20,8 @@ export default observer(function StudentContent() {
 
                 <CourseJoin />
 
+                <StudentMyCourses />
+                
                 <StudentUploadPanel />
 
             </div>
