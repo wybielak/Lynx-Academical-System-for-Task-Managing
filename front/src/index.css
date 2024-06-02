@@ -291,5 +291,9 @@ body, .main-container {
     background-color: var(--lightGray2);
 }
 
+.task {
+    background-color: #999;
+}
+
 
 

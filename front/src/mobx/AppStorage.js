@@ -15,10 +15,6 @@ export default class AppStorage {
         makeAutoObservable(this)
     }
 
-    // ########################## .Net API URL ##########################
-    apiHost = "https://localhost:7227"
-
-
     // ########################## ROLE ##########################
 
     rolesCollection = collection(db, 'roles')
@@ -310,10 +306,10 @@ export default class AppStorage {
     }
 
     // wybór kursu 
-    setSelectedCourseFull = (id) => {
+    setSelectedCourseFull = (courseId) => {
         // this.clearSelectedCourse()
         this.myCourses.map((course) => {
-            if (course.id == id) {
+            if (course.id == courseId) {
                 this.selectedCourseFull = course
             }
         })
@@ -327,7 +323,7 @@ export default class AppStorage {
         // this.studentsInCourse = []
     }
 
-    handleSelectedCourseId = (courseId) => {
+    handleSelectedCourse = (courseId) => {
         this.setSelectedCourseFull(courseId) // tymczasowo tak tylko tyle
     }
 
@@ -367,7 +363,6 @@ export default class AppStorage {
             console.log(err)
         }
     }
-
 
 
     // ########################## DEBUG ##########################

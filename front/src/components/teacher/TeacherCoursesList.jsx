@@ -18,7 +18,7 @@ export default observer(function TeacherCoursesList() {
                 {appStorage.myCourses.map(course => (
                     <div key={course.id}>
 
-                        - {course.courseName} <button onClick={() => appStorage.handleSelectedCourseId(course.id)}>Przejdź</button>
+                        - {course.courseName} <button onClick={() => appStorage.handleSelectedCourse(course.id)}>Przejdź</button>
 
                         {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id == course.id &&
                             //TODO przenoszenie na stronę kursu

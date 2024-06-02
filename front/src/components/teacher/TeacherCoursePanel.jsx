@@ -2,18 +2,18 @@ import React from 'react'
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
 
-import { auth } from '../../config/FirebaseConfig'
 import { useStore } from '../../mobx/Store'
-import AddUser from './AddUser'
-import AddCourse from './AddCourse'
-import TeacherCoursesList from './TeacherCoursesList'
-import Header from '../Header'
+import Header from '../Header';
+import TeacherTaskPanel from './TeacherTaskPanel';
 
 export default observer(function TeacherCoursePanel() {
 
     const { appStorage } = useStore();
+    const { uploadStorage } = useStore();
+
     useEffect(() => {
         appStorage.loadAllStudentsDataInCourse()
+        uploadStorage.getCourseTasks()
     }, [])
 
     return (
@@ -23,7 +23,27 @@ export default observer(function TeacherCoursePanel() {
                 {/* <Header role='Teacher' userName={auth?.currentUser?.email} /> */}
 
                 <h2> {appStorage.selectedCourseFull.courseName} </h2>
-                <p> zadania </p>
+                <h3> Zadania: </h3>
+                {uploadStorage.courseTasks && uploadStorage.courseTasks.length > 0 &&
+                    <div>
+
+                        {uploadStorage.courseTasks.map((task) => (
+                            <div key={task.id}>
+
+                                {task.taskName}
+
+                                <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button>
+
+                                {uploadStorage.selectedTaskFull && uploadStorage.selectedTaskFull.id == task.id &&
+                                    //TODO przenoszenie na stronę zadania
+                                    <TeacherTaskPanel />
+                                }
+
+                            </div>
+                        ))}
+
+                    </div>
+                }
 
                 <h3> Oczekujący studenci </h3>
                 {appStorage.selectedCourseFull.waitingStudentsIds && appStorage.selectedCourseFull.waitingStudentsIds.length > 0 &&
@@ -35,7 +55,7 @@ export default observer(function TeacherCoursePanel() {
                                 {/* {console.log("byId:", appStorage.getStudentById(id))} */}
                                 {/* * {id} */}
                                 {appStorage.myStudentsWithData.map((student) => {
-                                    if (student.userId == id) {
+                                    if (student.userId == id) { // mapowanie id na nazwe studenta
                                         // console.log("returning", student.name)
                                         return student.name
                                     }

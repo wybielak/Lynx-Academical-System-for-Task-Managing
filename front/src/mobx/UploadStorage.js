@@ -1,14 +1,54 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
+import { getDocs, collection, query, where } from 'firebase/firestore'
+
+import { db } from '../config/FirebaseConfig'
 
 export default class UploadStorage {
 
-    constructor() {
+    constructor(appStorage) {
+        this.appStorage = appStorage; // żeby można było używać rzeczy z appStorage
         makeAutoObservable(this)
     }
 
     // ########################## .Net API URL ##########################
     apiHost = "https://localhost:7227"
+
+
+    // ########################## TASKS ##########################
+    tasksCollection = collection(db, 'tasks')
+    courseTasks = []
+    selectedTaskFull = ''
+
+    setCourseTasks = (data) => {
+        this.courseTasks = data
+        console.log("zadania w kursie:", this.courseTasks)
+    }
+
+    getCourseTasks = async () => {
+        try {
+            const tasksQuery = query(this.tasksCollection, where("courseId", "==", this.appStorage.selectedCourseFull.id))
+            const data = await getDocs(tasksQuery)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
+            this.setCourseTasks(filteredData)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // wybór zadania 
+    setSelectedTaskFull = (taskId) => {
+        this.courseTasks.map((task) => {
+            if (task.id == taskId) {
+                this.selectedTaskFull = task
+            }
+        })
+        console.log("selectedTask:", this.selectedTaskFull)
+    }
+
+    handleSelectedTask = (taskId) => {
+        this.setSelectedTaskFull(taskId)
+    }
 
 
     // ########################## FILES ##########################

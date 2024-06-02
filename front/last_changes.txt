@@ -1,6 +1,12 @@
-mobx storage reorganizacja:
-appStorage
-uploadStorage (nowy)
+u nauczyciela: 
+ modyfikacja <TeacherCoursePanel>:
+  dodanie <TeacherTaskPanel>:
+   wyświetlanie zadań
+   i sprawdzanie kto przesłał
+
+mobx storage:
+ dodanie zależności w konstruktorze uploadStorage
+ żeby moża było tam korzystać z rzeczy z appStorage
 
 
 
