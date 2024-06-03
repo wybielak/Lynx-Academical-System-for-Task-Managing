@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";  // kolejnosc importow - najpierw sta
 import { signOut } from 'firebase/auth'     // i zewnetrzne
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { addDoc, doc } from 'firebase/firestore'
+import { addDoc, doc, getDoc } from 'firebase/firestore'
 import { getDocs, collection, query, where } from 'firebase/firestore'
 import { updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
@@ -36,17 +36,6 @@ export default class AppStorage {
             const data = await getDocs(roleQuery)
             const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
             this.setCurrentRole(filteredData[0].role) // i ustawienie swojej roli (możnaby rozdzielić)
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    getNameById = async (id) => {
-        try {
-            const roleQuery = query(this.rolesCollection, where("userId", "==", id))
-            const data = await getDocs(roleQuery)
-            const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
-            return filteredData[0].name
         } catch (err) {
             console.log(err)
         }
@@ -117,6 +106,8 @@ export default class AppStorage {
     logIn = async () => {
         try {
             await signInWithEmailAndPassword(auth, this.email, this.password)
+            this.onChangeEmail('')
+            this.onChangePassword('')
             console.log("Zalogowano")
         } catch (err) {
             console.error(err)
@@ -126,6 +117,8 @@ export default class AppStorage {
     logOut = async () => {
         try {
             await signOut(auth)
+            this.onChangeEmail('')
+            this.onChangePassword('')
             console.log("Nastąpiło wylogowanie")
         } catch (err) {
             console.log(err)
@@ -159,6 +152,9 @@ export default class AppStorage {
     coursesListWithStudent = [] // #w
     newCourseName = ''
     selectedCourseFull = ''
+
+    currentCourseId = ''
+    currentCourseData = ''
 
     setNewCourseName = (name) => {
         this.newCourseName = name
@@ -275,17 +271,6 @@ export default class AppStorage {
         } catch (err) {
             console.error(err)
         }
-    }
-
-    getCurrentCourseData = (id) => {  // TODO
-        // this.clearSelectedCourse()
-        this.coursesListWithStudent.map((course) => {
-            if (course.id == id) {
-                //this.selectedCourseFull = course
-                console.log(course.courseName)
-            }
-        })
-        //console.log("selectedCourse:", this.selectedCourseFull)
     }
 
     // dołączanie do wybranego kursu - student
@@ -420,6 +405,27 @@ export default class AppStorage {
         }
     }
 
+    // Wyświetlanie szczegółów kursu - student #ANCHOR
+
+    setCurrentCourseId = (id) => {
+        this.currentCourseId = id
+        console.log('Ustawiono currentCourseId')
+    }
+
+    getCurrentCourseData = async (id) => {  // TODO
+        console.log("Pobieram szczegoly kursu studenta")
+        try {
+            // const courseQuery = query(this.coursesCollection, where("id", "==", this.currentCourseId))
+            // const data = await getDocs(courseQuery)
+            //const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
+            //this.currentCourseData = filteredData
+            const courseRef = doc(this.coursesCollection, this.currentCourseId)
+            const data = await getDoc(courseRef)
+            this.currentCourseData = { ...data.data(), id: data.id };
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
 
     // ########################## DEBUG ##########################

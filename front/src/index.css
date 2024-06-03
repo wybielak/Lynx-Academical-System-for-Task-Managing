@@ -307,7 +307,7 @@ body, .main-container {
     margin-right: 20px;
 }
 
-.teacher-content .course .student-info button {
+.teacher-content .course .student-info button, .back-button button {
     align-self: center;
     padding: 5px 10px;
     background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
@@ -318,7 +318,7 @@ body, .main-container {
     transition: .1s;
 }
 
-.teacher-content .course .student-info button:hover {
+.teacher-content .course .student-info button:hover, .back-button button:hover {
     cursor: pointer;
     scale: 1.1;
 }
@@ -327,6 +327,16 @@ body, .main-container {
     font-weight: bold;
 }
 
+.back-button button {
+    font-size: 1.1em;
+    position: absolute;
+    top: 70px;
+    left: 10px;
+}
+
+.name-mapper {
+    margin: 0;
+}
 /* .content {
     background-color: var(--lightGray2);
 }

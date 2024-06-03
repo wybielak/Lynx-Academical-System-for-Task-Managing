@@ -7,10 +7,22 @@ import StudentUploadPanel from './StudentUploadPanel'
 import Header from '../Header'
 import CourseJoin from './CourseJoin'
 import StudentMyCourses from './StudentMyCourses'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import StudentCoursePanel from './StudentCoursePanel'
+
+const studentRouter = createBrowserRouter([
+    {
+        path: '/',
+        element: <><CourseJoin /><StudentMyCourses /><StudentUploadPanel /></>,
+    },
+    {
+        path: '/course-details-student',
+        element: <StudentCoursePanel />,
+    },
+]);
 
 export default observer(function StudentContent() {
 
-    const { appStorage } = useStore();
 
     return (
         <>
@@ -18,11 +30,7 @@ export default observer(function StudentContent() {
 
                 <Header role='Student' userName={auth?.currentUser?.email} />
 
-                <CourseJoin />
-
-                <StudentMyCourses />
-                
-                <StudentUploadPanel />
+                <RouterProvider router={studentRouter} />
 
             </div>
         </>
