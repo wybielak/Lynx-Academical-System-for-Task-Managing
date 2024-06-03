@@ -15,7 +15,7 @@ export default observer(function IdToNameMaper({ id }) {
             setName(name)
             setNameLoading(false)
         })
-    })
+    }, [name])
 
     return (
         <>
