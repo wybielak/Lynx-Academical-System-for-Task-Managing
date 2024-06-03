@@ -23,7 +23,8 @@ export default observer(function StudentCoursePanel() {
                 <div className='student-content course'>
                     <h1>Podgląd kursu</h1>
                     <h2> {appStorage.currentCourseData.courseName} </h2>
-                    <p>Prowadzący: <IdToNameMaper id={appStorage.currentCourseData.ownerId} /></p>
+                    <p>Prowadzący: <IdToNameMaper id={appStorage.currentCourseData.ownerId} /></p> 
+                    {/* To sprawdzić czy może być p w p */}
                     <h3> Zadania </h3>
                     {appStorage.tasksListCourse.map((task, index) => (
                         <div className='task' key={index}>
