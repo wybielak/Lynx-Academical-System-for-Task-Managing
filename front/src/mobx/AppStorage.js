@@ -43,10 +43,12 @@ export default class AppStorage {
 
     getNameById = async (id) => {
         try {
-            const roleQuery = query(this.rolesCollection, where("userId", "==", id))
-            const data = await getDocs(roleQuery)
-            const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
-            return filteredData[0].name
+            if (id !== undefined) {
+                const roleQuery = query(this.rolesCollection, where("userId", "==", id))
+                const data = await getDocs(roleQuery)
+                const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
+                return filteredData[0].name
+            }
         } catch (err) {
             console.log(err)
         }
@@ -146,15 +148,20 @@ export default class AppStorage {
     // ########################## KURSY ##########################
 
     coursesCollection = collection(db, 'courses')
+    tasksCollection = collection(db, 'tasks')
     myCourses = [] // #TODO trzeba to jakoś lepiej ogarnąć/ujednolicić 
     coursesListWithoutStudent = [] // #w
     coursesListWithWaitingStudent = [] // #w
     coursesListWithStudent = [] // #w
+    tasksListCourse = []
     newCourseName = ''
     selectedCourseFull = ''
 
     currentCourseId = ''
     currentCourseData = ''
+
+    currentTaskId = ''
+    currentTaskData = ''
 
     setNewCourseName = (name) => {
         this.newCourseName = name
@@ -415,13 +422,52 @@ export default class AppStorage {
     getCurrentCourseData = async (id) => {  // TODO
         console.log("Pobieram szczegoly kursu studenta")
         try {
-            // const courseQuery = query(this.coursesCollection, where("id", "==", this.currentCourseId))
-            // const data = await getDocs(courseQuery)
-            //const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
-            //this.currentCourseData = filteredData
             const courseRef = doc(this.coursesCollection, this.currentCourseId)
             const data = await getDoc(courseRef)
             this.currentCourseData = { ...data.data(), id: data.id };
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    setStudentTasks = (data) => {
+        this.tasksListCourse = data
+        console.log("Ustawiono zmienną coursesListWithWaitingStudent")
+    }
+
+    getStudentTasks = async (id) => {
+        console.log("Pobieram zadania studenta")
+        try {
+            const data = await getDocs(this.tasksCollection)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+            
+            var filteredData2 = []
+
+            for (var i = 0; i < filteredData.length; i++) {
+                if (filteredData[i].courseId == id) {
+                    filteredData2.push(filteredData[i])
+                    continue
+                }
+            }
+
+            this.setStudentTasks(filteredData2)
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    setCurrentTaskId = (id) => {
+        this.currentTaskId = id
+        console.log('Ustawiono currentTaskId')
+    }
+
+    getCurrentTaskData = async (id) => {  // TODO
+        console.log("Pobieram szczegoly zadania studenta")
+        try {
+            const taskRef = doc(this.tasksCollection, this.currentTaskId)
+            const data = await getDoc(taskRef)
+            this.currentTaskData = { ...data.data(), id: data.id };
         } catch (err) {
             console.log(err)
         }

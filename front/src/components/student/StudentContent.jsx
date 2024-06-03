@@ -13,11 +13,15 @@ import StudentCoursePanel from './StudentCoursePanel'
 const studentRouter = createBrowserRouter([
     {
         path: '/',
-        element: <><CourseJoin /><StudentMyCourses /><StudentUploadPanel /></>,
+        element: <><CourseJoin /><StudentMyCourses /></>,
     },
     {
         path: '/course-details-student',
         element: <StudentCoursePanel />,
+    },
+    {
+        path: '/task-details-student',
+        element: <StudentUploadPanel />,
     },
 ]);
 

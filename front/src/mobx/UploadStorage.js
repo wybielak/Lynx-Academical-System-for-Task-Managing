@@ -28,68 +28,72 @@ export default class UploadStorage {
     }
 
     // upload plików
-    submitFiles = async () => {
+    submitFiles = async (subject_name, student_name, task_name) => {
 
-        try {
+        console.log(subject_name.replace(/ /g, "_"))
+        console.log(student_name.split("@")[0].replace(/ /g, "_"))
+        console.log(task_name.replace(/ /g, "_"))
 
-            if (this.files.length == 0) { // jeśli nie ma żadnych plików
-                throw new Error("Brak plików!")
-            }
+        // try {
 
-            const url = new URL(this.apiHost)
-            url.pathname = "/api/FileManager/uploadfile"
-            // #hardcoded (for now)
-            url.searchParams.append("_SubjectName", "Zielonka_Programowanie")
-            url.searchParams.append("_StudentName", "Gesiek")
-            url.searchParams.append("_TaskName", "Zad1")
+        //     if (this.files.length == 0) { // jeśli nie ma żadnych plików
+        //         throw new Error("Brak plików!")
+        //     }
 
-            var numOfFilesUploaded = 0
-            for (let i = 0; i < this.files.length; i++) {
+        //     const url = new URL(this.apiHost)
+        //     url.pathname = "/api/FileManager/uploadfile"
+        //     // #hardcoded (for now)
+        //     url.searchParams.append("_SubjectName", "Zielonka_Programowanie")
+        //     url.searchParams.append("_StudentName", "Gesiek")
+        //     url.searchParams.append("_TaskName", "Zad1")
 
-                const file = this.files[i];
-                console.log("file:", i, ":", file)
+        //     var numOfFilesUploaded = 0
+        //     for (let i = 0; i < this.files.length; i++) {
 
-                const formData = new FormData();
-                formData.append("_IFormFile", file)
+        //         const file = this.files[i];
+        //         console.log("file:", i, ":", file)
 
-                console.log("Wysyłam plik do API") // wysyłamy pojedyńczo
-                axios
-                    .post(url, formData)
-                    .then((response) => { // 2xx
+        //         const formData = new FormData();
+        //         formData.append("_IFormFile", file)
 
-                        console.log("response:", response)
-                        numOfFilesUploaded++
-                        // console.log("num:", numOfFilesUploaded)
-                        // console.log("num:", this.files.length)
+        //         console.log("Wysyłam plik do API") // wysyłamy pojedyńczo
+        //         axios
+        //             .post(url, formData)
+        //             .then((response) => { // 2xx
 
-                        if (numOfFilesUploaded == this.files.length) { // jeśli wszystkie wysłane
-                            alert("Przesłano pliki.")
-                            console.log("Rrzesłano pliki")
-                            console.log("Czyszcze zmienną")
-                            this.files = ""
-                            console.log("Czyszcze input")
-                            document.getElementById("filesUpload").value = ""
-                        }
+        //                 console.log("response:", response)
+        //                 numOfFilesUploaded++
+        //                 // console.log("num:", numOfFilesUploaded)
+        //                 // console.log("num:", this.files.length)
 
-                    })
-                    .catch(error => {
-                        if (error.response) { // 4xx, 5xx itp.
-                            console.log("request error: ", error.response);
-                        }
-                        else if (error.request) { // no response
-                            console.log("no response error: ", error.request)
-                        }
-                        else {
-                            console.log("other error: ", error.message)
-                        }
-                        alert("Nie udało się przesłać pliku")
-                    })
-            }
-        }
-        catch (err) {
-            console.log("err: ", err)
-            alert("Nie udało się przetworzyć i wysłać plików. ", err)
-        }
+        //                 if (numOfFilesUploaded == this.files.length) { // jeśli wszystkie wysłane
+        //                     alert("Przesłano pliki.")
+        //                     console.log("Rrzesłano pliki")
+        //                     console.log("Czyszcze zmienną")
+        //                     this.files = ""
+        //                     console.log("Czyszcze input")
+        //                     document.getElementById("filesUpload").value = ""
+        //                 }
+
+        //             })
+        //             .catch(error => {
+        //                 if (error.response) { // 4xx, 5xx itp.
+        //                     console.log("request error: ", error.response);
+        //                 }
+        //                 else if (error.request) { // no response
+        //                     console.log("no response error: ", error.request)
+        //                 }
+        //                 else {
+        //                     console.log("other error: ", error.message)
+        //                 }
+        //                 alert("Nie udało się przesłać pliku")
+        //             })
+        //     }
+        // }
+        // catch (err) {
+        //     console.log("err: ", err)
+        //     alert("Nie udało się przetworzyć i wysłać plików. ", err)
+        // }
 
     }
 
