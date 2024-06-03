@@ -419,12 +419,14 @@ export default class AppStorage {
         console.log('Ustawiono currentCourseId')
     }
 
-    getCurrentCourseData = async (id) => {  // TODO
+    getCurrentCourseData = async () => {  // TODO
         console.log("Pobieram szczegoly kursu studenta")
         try {
-            const courseRef = doc(this.coursesCollection, this.currentCourseId)
-            const data = await getDoc(courseRef)
-            this.currentCourseData = { ...data.data(), id: data.id };
+            if (this.currentCourseId !== '') {
+                const courseRef = doc(this.coursesCollection, this.currentCourseId)
+                const data = await getDoc(courseRef)
+                this.currentCourseData = { ...data.data(), id: data.id };
+            }
         } catch (err) {
             console.log(err)
         }
@@ -440,7 +442,7 @@ export default class AppStorage {
         try {
             const data = await getDocs(this.tasksCollection)
             const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-            
+
             var filteredData2 = []
 
             for (var i = 0; i < filteredData.length; i++) {
@@ -462,12 +464,14 @@ export default class AppStorage {
         console.log('Ustawiono currentTaskId')
     }
 
-    getCurrentTaskData = async (id) => {  // TODO
+    getCurrentTaskData = async () => {  // TODO
         console.log("Pobieram szczegoly zadania studenta")
         try {
-            const taskRef = doc(this.tasksCollection, this.currentTaskId)
-            const data = await getDoc(taskRef)
-            this.currentTaskData = { ...data.data(), id: data.id };
+            if (this.currentCourseId !== '') {
+                const taskRef = doc(this.tasksCollection, this.currentTaskId)
+                const data = await getDoc(taskRef)
+                this.currentTaskData = { ...data.data(), id: data.id };
+            }
         } catch (err) {
             console.log(err)
         }
