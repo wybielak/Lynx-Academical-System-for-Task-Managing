@@ -1,43 +1,47 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { useStore } from '../../mobx/Store'
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 import IdToNameMaper from '../IdToNameMaper';
 import { auth } from '../../config/FirebaseConfig';
 
 export default observer(function StudentUploadPanel() {
 
     const { appStorage, uploadStorage } = useStore();
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        appStorage.getCurrentTaskData()
+        setLoading(true)
+        appStorage.getCurrentTaskData().then(() => setLoading(false))
     }, [])
 
     return (
         <>
-            <div className='upload-panel'>
+            {appStorage.currentTaskData == '' && !loading ? <Navigate to={'/'} /> :
 
-                <NavLink to='/' className='back-button'>
-                    <button onClick={() => appStorage.setCurrentTaskId('')}>Back</button>
-                </NavLink>
+                <div className='upload-panel'>
 
-                <h1>Podgląd zadania</h1>
-                <h2>{appStorage.currentTaskData.taskName}</h2>
+                    <NavLink to='/course-details-student' className='back-button'>
+                        <button onClick={() => appStorage.setCurrentTaskId('')}>Back</button>
+                    </NavLink>
 
-                <div className='info'>
-                    <IdToNameMaper id={appStorage.currentTaskData.ownerId} />
-                    <p>Termin do: {appStorage.currentTaskData.taskDeadline}</p>
-                </div>
+                    <h1>Podgląd zadania</h1>
+                    <h2>{appStorage.currentTaskData.taskName}</h2>
 
-                <p>{appStorage.currentTaskData.taskDescription}</p>
+                    <div className='info'>
+                    {!loading ? <IdToNameMaper id={appStorage.currentTaskData.ownerId} /> : ''}
+                        <p>Termin do: {appStorage.currentTaskData.taskDeadline}</p>
+                    </div>
 
-                <div>
-                    <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
-                    <button onClick={() => uploadStorage.submitFiles(appStorage.currentCourseData.courseName, auth?.currentUser.email, appStorage.currentTaskData.taskName)}>Prześlij</button>
-                </div>
+                    <p>{appStorage.currentTaskData.taskDescription}</p>
 
-            </div>
+                    <div>
+                        <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
+                        <button onClick={() => uploadStorage.submitFiles(appStorage.currentCourseData.courseName, auth?.currentUser.email, appStorage.currentTaskData.taskName)}>Prześlij</button>
+                    </div>
+
+                </div>}
         </>
     )
 })
