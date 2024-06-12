@@ -1,29 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
 
 import { useStore } from '../../mobx/Store'
+import { NavLink, Navigate } from 'react-router-dom';
+import IdToNameMaper from '../IdToNameMaper';
+import { auth } from '../../config/FirebaseConfig';
 
 export default observer(function StudentUploadPanel() {
 
-    const { uploadStorage } = useStore();
+    const { appStorage, uploadStorage } = useStore();
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        setLoading(true)
+        appStorage.getCurrentTaskData().then(() => setLoading(false))
+    }, [])
 
     return (
         <>
-            <div className='uploadPanel'>
+            {appStorage.currentTaskData == '' && !loading ? <Navigate to={'/'} /> :
 
-                <h1>Upload</h1>
+                <div className='upload-panel'>
 
-                <div>[#TODO wybór zadań]</div>
-                <div>[#hardcoded przesyłanie do Zielonka_Programowanie Gesiek Zad1]</div>
+                    <NavLink to='/course-details-student' className='back-button'>
+                        <button onClick={() => appStorage.setCurrentTaskId('')}>Back</button>
+                    </NavLink>
 
-                <br></br>
+                    <h1>Podgląd zadania</h1>
+                    <h2>{appStorage.currentTaskData.taskName}</h2>
 
-                <div>
-                    <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
-                    <button onClick={uploadStorage.submitFiles}>Prześlij</button>
-                </div>
+                    <div className='info'>
+                    {!loading ? <IdToNameMaper id={appStorage.currentTaskData.ownerId} /> : ''}
+                        <p>Termin do: {appStorage.currentTaskData.taskDeadline}</p>
+                    </div>
 
-            </div>
+                    <p>{appStorage.currentTaskData.taskDescription}</p>
+
+                    <div>
+                        <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
+                        <button onClick={() => uploadStorage.submitFiles(appStorage.currentCourseData.courseName, auth?.currentUser.email, appStorage.currentTaskData.taskName)}>Prześlij</button>
+                    </div>
+
+                </div>}
         </>
     )
 })

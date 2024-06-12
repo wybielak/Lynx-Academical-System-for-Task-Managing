@@ -1,6 +1,19 @@
-+ <DownloadTask>
-+ downloadTask(courseName, studentName, taskName)
+> zmergowane ze stroną studenta (routing) (dodanie funkcji i komponentów) (<IdToNameMaper> oraz <StudentCoursePanel>)
+> przerobiłem swoje [u nauczyciela] na wybielakowe mapowanie ID na NAZWE
 
-+ przerobione na react-router-dom
+> wywawlony <DownloadTask> (już niepotrzebny)
+
+> modyfikacja "downloadTask(courseName, studentID, taskName)"
+> zakomentowanie starego rozwiązania
+> modyfikacja "updateTaskDescription(taskFull)
+
+> dopracowanie routingu
+    dodanie useState "loading" (na TeacherContent i TeacherCoursePanel)
+
+> działa pobieranie zadania od studenta i zmiana opisu zadania
 
 
+TO DO NEXT: możliwość tworzenia zadania
+
+
+TO FIX: odświeżanie po zaakceptowaniu studenta do kursu

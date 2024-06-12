@@ -1,7 +1,6 @@
-import React from 'react'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 
 import { auth } from '../../config/FirebaseConfig'
 import { useStore } from '../../mobx/Store'
@@ -30,35 +29,35 @@ const teacherRouter = createBrowserRouter([
 export default observer(function TeacherContent() {
 
     const { appStorage } = useStore();
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        appStorage.getMyCourses()
+
+        setLoading(true)
+        appStorage.getMyCourses().then(() => setLoading(false))
+
         // możliwe błędy typu race condition
         // https://react.dev/learn/synchronizing-with-effects#fetching-data
         // https://react.dev/learn/you-might-not-need-an-effect#fetching-data
         // może będzie to trza zmienić, ale na razie zostawiam w taki bardziej 'naiwny' sposób
+        // //NOTE WORK IN PROGRESS
+
     }, [])
 
     return (
         <>
-            <div className='teacher-content content'>
+            {loading ?
+                // <div className='loadingScreen'> Wait... </div> // Hmm? //#REVIEW
+                <div> Wait... </div>
+                :
+                <div className='teacher-content content'>
 
-                <Header role='Teacher' userName={auth?.currentUser?.email} />
+                    <Header role='Teacher' userName={auth?.currentUser?.email} />
 
-                <RouterProvider router={teacherRouter} />
+                    <RouterProvider router={teacherRouter} />
 
-                {/* <TeacherCoursesList /> */}
-
-                {/* {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id && //NOTE 
-                    //TODO przenoszenie na osobną stronę kursu
-                    <TeacherCoursePanel />
-                } */}
-
-                {/* <AddCourse /> */}
-
-                {/* <AddUser /> */}
-
-            </div>
+                </div>
+            }
         </>
     )
 })

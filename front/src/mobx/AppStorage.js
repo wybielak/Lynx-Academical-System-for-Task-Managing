@@ -3,7 +3,7 @@ import { signOut } from 'firebase/auth'     // i zewnetrzne
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { addDoc, doc } from 'firebase/firestore'
-import { getDocs, collection, query, where } from 'firebase/firestore'
+import { getDocs, getDoc, collection, query, where } from 'firebase/firestore'
 import { updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 import { db } from '../config/FirebaseConfig'   // potem te "nasze"
@@ -117,11 +117,11 @@ export default class AppStorage {
         }
     }
 
-    // ustawienie studentów (id, nazwa, ...)
+    // ustawienie moich studentów z kursu (id, nazwa, ...) - nauczyciel
     setMyStudentsWithData = (data) => {
         this.myStudentsWithData = data
-        console.log("myStudentsWithData:")
-        this.showMapVariableIDsPlus(this.myStudentsWithData)
+        // console.log("myStudentsWithData:")
+        // this.showMapVariableIDsPlus(this.myStudentsWithData)
     }
 
     // getStudentById = (id) => {
@@ -138,12 +138,22 @@ export default class AppStorage {
     // ########################## KURSY ##########################
 
     coursesCollection = collection(db, 'courses')
-    myCourses = [] // #TODO trzeba to jakoś lepiej ogarnąć/ujednolicić 
+    tasksCollection = collection(db, 'tasks') // yo #w, #NOTE jo mom to już w UploadStorage.js!
+    myCourses = [] // #TODO możnaby ujednolicić 
+
     coursesListWithoutStudent = [] // #w
     coursesListWithWaitingStudent = [] // #w
     coursesListWithStudent = [] // #w
+    tasksListCourse = [] // #w
+
     newCourseName = ''
     selectedCourseFull = ''
+
+    currentCourseId = '' // #w
+    currentCourseData = '' // #w
+
+    currentTaskId = '' // #w
+    currentTaskData = '' // #w
 
     setNewCourseName = (name) => {
         this.newCourseName = name
@@ -169,10 +179,10 @@ export default class AppStorage {
         })
     }
 
-    setMyCourses = (coursesData) => {
-        this.myCourses = coursesData
-        console.log("myCourses:")
-        this.showMapVariableIDsPlus(this.myCourses)
+    setMyCourses = (data) => {
+        this.myCourses = data
+        // console.log("myCourses:")
+        // this.showMapVariableIDsPlus(this.myCourses)
     }
 
     // wylistowanie swoich kursów - nauczyciel
@@ -183,12 +193,15 @@ export default class AppStorage {
             const courseQuery = query(this.coursesCollection, where("ownerId", "==", auth?.currentUser?.uid))
             const data = await getDocs(courseQuery)
             const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
+
             this.setMyCourses(filteredData)
+
         } catch (err) {
             console.log(err)
         }
     }
 
+    // student
     setCoursesListWithoutStudent = (coursesData) => {
         this.coursesListWithoutStudent = coursesData
         console.log("Ustawiono zmienną setCoursesListWithoutStudent")
@@ -233,6 +246,7 @@ export default class AppStorage {
         }
     }
 
+    // student
     setCoursesListWithStudent = (coursesData) => {
         this.coursesListWithStudent = coursesData
         console.log("Ustawiono zmienną setCoursesListWithStudent")
@@ -262,16 +276,16 @@ export default class AppStorage {
         }
     }
 
-    getCurrentCourseData = (id) => {  // TODO
-        // this.clearSelectedCourse()
-        this.coursesListWithStudent.map((course) => {
-            if (course.id == id) {
-                //this.selectedCourseFull = course
-                console.log(course.courseName)
-            }
-        })
-        //console.log("selectedCourse:", this.selectedCourseFull)
-    }
+    // getCurrentCourseData = (id) => {  // TODO
+    //     // this.clearSelectedCourse()
+    //     this.coursesListWithStudent.map((course) => {
+    //         if (course.id == id) {
+    //             //this.selectedCourseFull = course
+    //             console.log(course.courseName)
+    //         }
+    //     })
+    //     //console.log("selectedCourse:", this.selectedCourseFull)
+    // }
 
     // dołączanie do wybranego kursu - student
     addWaitingStudentToCourse = async (courseid, studentid) => {
@@ -347,23 +361,25 @@ export default class AppStorage {
     }
 
     // wybór kursu 
-    setSelectedCourseFull = (courseId) => {
+    setSelectedCourseFull = (data) => {
+        // this.clearSelectedCourse()
+        this.selectedCourseFull = data
+        console.log("selectedCourseFull:", this.selectedCourseFull)
+    }
+
+    clearSelectedCourseFull = () => { //NOTE - do poprawienia/sprawdzenia czy działa przy przełączaniu między stronami
+        this.selectedCourseFull = ''
+        console.log("czyszczę selectedCourseFull")
+    }
+
+    handleSelectCourse = (courseId) => {
         // this.clearSelectedCourse()
         this.myCourses.map((course) => {
             if (course.id == courseId) {
-                this.selectedCourseFull = course
+                this.setSelectedCourseFull(course)
             }
         })
-        console.log("selectedCourse:", this.selectedCourseFull)
-    }
-
-    clearSelectedCourse = () => { //NOTE - do poprawienia/sprawdzenia czy działa prz przełączaniu między stronami
-        console.log("czyszczę wybraność kursu")
-        this.selectedCourseFull = null
-    }
-
-    handleSelectedCourse = (courseId) => {
-        this.setSelectedCourseFull(courseId) // tymczasowo tak tylko tyle
+        console.log("selectedCourseFull:", this.selectedCourseFull)
     }
 
     addStudentToCourse = async (course, studentId) => {
@@ -374,29 +390,101 @@ export default class AppStorage {
         await updateDoc(courseRef, {
             studentsIds: arrayUnion(studentId),
             waitingStudentsIds: arrayRemove(studentId)
-        }).then(async () => {
-            // dla odświeżenia
-            await this.getMyCourses()
-        }).then(() => {
-            return this.setSelectedCourseFull(course.id)
         })
-        alert("Dodano")
+            .then(async () => {
+                // dla odświeżenia
+                await this.getMyCourses()
+            })
+            .then(() => {
+                alert("Dodano")
+                return this.setSelectedCourseFull(course.id)
+            })
     }
 
-    // pobranie danych od studentach (id, nazwa, ...), który należą (lub chcą należeć) do wybranego kursu - nauczyciel
-    loadAllStudentsDataInCourse = async () => {
+    // // pobranie danych od studentach (id, nazwa, ...), który należą (lub chcą należeć) do wybranego kursu - nauczyciel
+    // loadAllStudentsDataInCourse = async () => {
+    //     try {
+    //         const allIds = this.selectedCourseFull.studentsIds.concat(this.selectedCourseFull.waitingStudentsIds)
+    //         // console.log("allIds:", allIds)
+
+    //         if (allIds.length > 0) {
+
+    //             var students = []
+    //             const studentsWithData = query(this.rolesCollection, where("userId", "in", allIds));
+    //             const querySnapshot = await getDocs(studentsWithData)
+
+    //             querySnapshot.forEach((doc) => {
+    //                 // console.log("student:", doc.id, ' ', doc.data())
+    //                 students.push(doc.data()) // role: , name: , userId: 
+    //             })
+
+    //             this.setMyStudentsWithData(students)
+
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
+
+    // Wyświetlanie szczegółów kursu - student #ANCHOR
+
+    setCurrentCourseId = (id) => {
+        this.currentCourseId = id
+        console.log('Ustawiono currentCourseId')
+    }
+
+    getCurrentCourseData = async () => {  // TODO
+        console.log("Pobieram szczegoly kursu studenta")
         try {
-            const allIds = this.selectedCourseFull.studentsIds.concat(this.selectedCourseFull.waitingStudentsIds)
-            // console.log("allIds:", allIds)
-            if (allIds.length > 0) {
-                var students = []
-                const studentsWithData = query(this.rolesCollection, where("userId", "in", allIds));
-                const querySnapshot = await getDocs(studentsWithData)
-                querySnapshot.forEach((doc) => {
-                    // console.log("student:", doc.id, ' ', doc.data())
-                    students.push(doc.data()) // role: , name: , userId: 
-                })
-                this.setMyStudentsWithData(students)
+            if (this.currentCourseId !== '') {
+                const courseRef = doc(this.coursesCollection, this.currentCourseId)
+                const data = await getDoc(courseRef)
+                this.currentCourseData = { ...data.data(), id: data.id };
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    setStudentTasks = (data) => {
+        this.tasksListCourse = data
+        console.log("Ustawiono zmienną coursesListWithWaitingStudent")
+    }
+
+    getStudentTasks = async (id) => {
+        console.log("Pobieram zadania studenta")
+        try {
+            const data = await getDocs(this.tasksCollection)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+            var filteredData2 = []
+
+            for (var i = 0; i < filteredData.length; i++) {
+                if (filteredData[i].courseId == id) {
+                    filteredData2.push(filteredData[i])
+                    continue
+                }
+            }
+
+            this.setStudentTasks(filteredData2)
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    setCurrentTaskId = (id) => {
+        this.currentTaskId = id
+        console.log('Ustawiono currentTaskId')
+    }
+
+    getCurrentTaskData = async () => {  // TODO
+        console.log("Pobieram szczegoly zadania studenta")
+        try {
+            if (this.currentCourseId !== '') {
+                const taskRef = doc(this.tasksCollection, this.currentTaskId)
+                const data = await getDoc(taskRef)
+                this.currentTaskData = { ...data.data(), id: data.id };
             }
         } catch (err) {
             console.log(err)

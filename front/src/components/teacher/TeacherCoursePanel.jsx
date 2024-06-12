@@ -1,101 +1,88 @@
-import React from 'react'
-import { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { NavLink } from 'react-router-dom';
+import { NavLink, Navigate } from 'react-router-dom';
 
 import { useStore } from '../../mobx/Store'
-import Header from '../Header';
-import TeacherTaskPanel from './TeacherTaskPanel';
+import IdToNameMaper from '../IdToNameMaper';
 
 export default observer(function TeacherCoursePanel() {
 
     const { appStorage } = useStore();
     const { uploadStorage } = useStore();
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        appStorage.loadAllStudentsDataInCourse()
-        uploadStorage.getCourseTasks()
-        uploadStorage.clearSelectedTaskFull()
+
+        setLoading(true)
+
+        if (appStorage.selectedCourseFull != '') {
+            uploadStorage.getCourseTasks()
+                .then(() => setLoading(false))
+        }
+
     }, [])
 
     return (
         <>
-            <div className='teacher-content course'>
+            {!appStorage.selectedCourseFull ?
+                <Navigate to={'/'} />
+                :
+                loading ?
+                    // <div className='loadingScreen'> Wait... </div> // Hmm? //#REVIEW
+                    <div> Wait... </div>
+                    :
+                    <div className='teacher-content course'>
 
-                <NavLink to='/' className='back-button'>
-                    <button onClick={() => appStorage.clearSelectedCourse()}>Back</button>
-                </NavLink>
+                        <NavLink to='/' className='back-button'>
+                            <button onClick={() => appStorage.clearSelectedCourseFull()}>Back</button>
+                        </NavLink>
 
-                <h1>Podgląd kursu</h1>
-                <h2> {appStorage.selectedCourseFull.courseName} </h2>
-                <h3> Zadania </h3>
-                {uploadStorage.courseTasks && uploadStorage.courseTasks.length > 0 &&
-                    <div>
+                        <h1>Podgląd kursu</h1>
+                        <h2> {appStorage.selectedCourseFull.courseName} </h2>
 
-                        {uploadStorage.courseTasks.map((task) => (
-                            <div className="student-info" key={task.id}>
+                        <h3>Zadania</h3>
+                        {uploadStorage.courseTasks && uploadStorage.courseTasks.length > 0 &&
+                            <div>
+                                {uploadStorage.courseTasks.map((task) => (
+                                    <div className="student-info" key={task.id}>
+                                        {task.taskName}
+                                        <NavLink to='/task-details-teacher' >
+                                            <button onClick={() => uploadStorage.handleSelectTask(task.id)}>Przejdź</button>
+                                        </NavLink>
+                                    </div>
+                                ))}
+                            </div>
+                        }
 
-                                {task.taskName}
+                        <h3> Oczekujący studenci </h3>
+                        {appStorage.selectedCourseFull.waitingStudentsIds && appStorage.selectedCourseFull.waitingStudentsIds.length > 0 &&
+                            <div>
 
-                                {/* <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button> */}
-
-                                <NavLink to='/task-details-teacher' >
-                                    <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button>
-                                </NavLink>
-
-                                {/* {uploadStorage.selectedTaskFull && uploadStorage.selectedTaskFull.id == task.id &&
-                                    //TODO przenoszenie na osobną stronę zadania
-                                    <TeacherTaskPanel />
-                                } */}
+                                {appStorage.selectedCourseFull.waitingStudentsIds.map((id) => (
+                                    <div className="student-info" key={id}>
+                                        <IdToNameMaper id={id} />
+                                        <button onClick={() => appStorage.addStudentToCourse(appStorage.selectedCourseFull, id)}>Zatwierdź</button>
+                                    </div>
+                                ))}
 
                             </div>
-                        ))}
+                        }
 
-                    </div>
-                }
+                        <h3> Dodani studenci </h3>
+                        {appStorage.selectedCourseFull.studentsIds && appStorage.selectedCourseFull.studentsIds.length > 0 &&
+                            <div>
 
-                <h3> Oczekujący studenci </h3>
-                {appStorage.selectedCourseFull.waitingStudentsIds && appStorage.selectedCourseFull.waitingStudentsIds.length > 0 &&
-                    <div>
-
-                        {appStorage.selectedCourseFull.waitingStudentsIds.map((id) => (
-                            <div className="student-info" key={id}>
-
-                                <p>
-                                    {appStorage.myStudentsWithData.map((student) => {
-                                        if (student.userId == id) { // mapowanie id na nazwe studenta
-                                            return student.name
-                                        }
-                                    })}
-                                </p>
-                                <button onClick={() => appStorage.addStudentToCourse(appStorage.selectedCourseFull, id)}>Zatwierdź</button>
+                                {appStorage.selectedCourseFull.studentsIds.map((id) => (
+                                    <div className="student-info" key={id}>
+                                        <IdToNameMaper id={id} />
+                                    </div>
+                                ))}
 
                             </div>
-                        ))}
-
+                        }
                     </div>
-                }
 
-                <h3> Dodani studenci </h3>
-                {appStorage.selectedCourseFull.studentsIds && appStorage.selectedCourseFull.studentsIds.length > 0 &&
-                    <div>
-
-                        {appStorage.selectedCourseFull.studentsIds.map((id) => (
-                            <div className="student-info" key={id}>
-
-                                {appStorage.myStudentsWithData.map((student) => {
-                                    if (student.userId == id) { // mapowanie id na nazwe studenta
-                                        return student.name
-                                    }
-                                })}
-
-                            </div>
-                        ))}
-
-                    </div>
-                }
-
-            </div>
+            }
         </>
     )
 })

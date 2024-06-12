@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
-import { getDocs, collection, query, where} from 'firebase/firestore'
-import { doc, updateDoc} from 'firebase/firestore'
+import { getDocs, collection, query, where } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 
 import { auth, db } from '../config/FirebaseConfig'
 
@@ -20,11 +20,11 @@ export default class UploadStorage {
     tasksCollection = collection(db, 'tasks')
     courseTasks = []
     selectedTaskFull = ''
-    newDescription = ''
+    newTaskDescription = ''
 
     setCourseTasks = (data) => {
         this.courseTasks = data
-        console.log("zadania w kursie:", this.courseTasks)
+        console.log("courseTasks:", this.courseTasks)
     }
 
     getCourseTasks = async () => {
@@ -32,51 +32,61 @@ export default class UploadStorage {
             const tasksQuery = query(this.tasksCollection, where("courseId", "==", this.appStorage.selectedCourseFull.id))
             const data = await getDocs(tasksQuery)
             const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
+
             this.setCourseTasks(filteredData)
+
         } catch (err) {
             console.log(err)
         }
     }
 
     // wybór zadania 
-    setSelectedTaskFull = (taskId) => {
+    setSelectedTaskFull = (data) => {
+        this.selectedTaskFull = data
+        console.log("selectedTaskFull:", this.selectedTaskFull)
+    }
+
+    clearSelectedTaskFull = () => {
+        this.selectedTaskFull = ''
+        console.log("czyszczę selectedTaskFull")
+    }
+
+    handleSelectTask = (taskId) => {
         this.courseTasks.map((task) => {
             if (task.id == taskId) {
-                this.selectedTaskFull = task
-                console.log("selectedTask:", this.selectedTaskFull)
-                this.setNewDescription(task.taskDescription)
-                return
+                this.setSelectedTaskFull(task)
+                this.setNewTaskDescription(task.taskDescription)
+                // console.log("newTaskDescription:", this.newTaskDescription)
             }
         })
     }
 
-    clearSelectedTaskFull = () => {
-        console.log("czyszczę wybraność zadania")
-        this.selectedTaskFull = null
+    setNewTaskDescription = (data) => {
+        this.newTaskDescription = data
     }
 
-    handleSelectedTask = (taskId) => {
-        this.setSelectedTaskFull(taskId)
-    }
+    updateTaskDescription = async (taskFull) => {
 
-    setNewDescription = (data) => {
-        this.newDescription = data
-    }
+        console.log("zmieniam taskDescription..", taskFull.id, this.newTaskDescription)
+        const courseRef = doc(db, "tasks", taskFull.id,)
 
-    updateTaskDescription = async (taskId) => {
-
-        console.log("zmieniam taskDescription..", taskId, this.newDescription)
-        const courseRef = doc(db, "tasks", taskId)
-
+        // w bazie
         await updateDoc(courseRef, {
-            taskDescription: this.newDescription
-        }).then(async () => {
-            // dla odświeżenia
-            await this.getCourseTasks()
-        }).then(() => {
-            return this.setSelectedTaskFull(taskId)
+            taskDescription: this.newTaskDescription
         })
-        alert("Zaktualizowano")
+            .then(async () => {
+                await this.appStorage.getMyCourses()
+            })
+            .then(async () => {
+                await this.getCourseTasks()
+            })
+            .then(() => {
+                // lokalnie
+                this.handleSelectTask(taskFull.id)
+            })
+            .finally(
+                alert("Zaktualizowano")
+            )
     }
 
 
@@ -163,57 +173,62 @@ export default class UploadStorage {
     }
 
     // download plików
-    downloadTask = async (courseName, studentName, taskName) => {
-
+    downloadTask = async (courseName, studentId, taskName) => {
         try {
-            const url = new URL(this.apiHost)
-            url.pathname = "/api/FileManager/downloadfile"
-            url.searchParams.append("_SubjectName", courseName)
-            url.searchParams.append("_StudentName", studentName)
-            url.searchParams.append("_TaskName", taskName)
+            this.appStorage.getNameById(studentId)
+                .then((studentName) => {
 
-            console.log("Żądanie pobrania pliku:", url)
-            axios
-                .get(url, { responseType: 'blob' })
-                .then((response) => { // 2xx
+                    const url = new URL(this.apiHost)
 
-                    console.log("response:", response)
-                    console.log("Pobrano plik")
+                    url.pathname = "/api/FileManager/downloadfile"
+                    url.searchParams.append("_SubjectName", courseName)
+                    url.searchParams.append("_StudentName", studentName)
+                    url.searchParams.append("_TaskName", taskName)
 
-                    // utworzenie URLa do pliku
-                    const fileURL = window.URL.createObjectURL(new Blob([response.data]));
-                    const fileLink = document.createElement('a');
+                    console.log("Żądanie pobrania pliku:", url)
+                    axios
+                        .get(url, { responseType: 'blob' })
+                        .then((response) => { // 2xx
 
-                    fileLink.href = fileURL;
-                    fileLink.setAttribute('download', taskName); // ustawienie nazwy pliku
-                    document.body.appendChild(fileLink);
+                            console.log("response:", response)
+                            console.log("Pobrano plik")
 
-                    fileLink.click();
+                            // utworzenie URLa do pliku
+                            const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                            const fileLink = document.createElement('a');
 
-                    // czyszczenie
-                    document.body.removeChild(fileLink);
-                    window.URL.revokeObjectURL(fileURL);
+                            fileLink.href = fileURL;
+                            // #TODO sanityzacja parametrów
+                            var fileName = `${courseName} ${studentName} ${taskName}.zip`
+                            fileLink.setAttribute('download', fileName); // ustawienie nazwy pliku
+                            document.body.appendChild(fileLink);
+
+                            fileLink.click();
+
+                            // czyszczenie
+                            document.body.removeChild(fileLink);
+                            window.URL.revokeObjectURL(fileURL);
+
+                        })
+                        .catch(error => {
+                            if (error.response) { // 4xx, 5xx itp.
+                                console.log("request error: ", error.response);
+                            }
+                            else if (error.request) { // no response
+                                console.log("no response error: ", error.request)
+                            }
+                            else {
+                                console.log("other error: ", error.message)
+                            }
+                            alert("Nie udało się przesłać pliku")
+                        })
 
                 })
-                .catch(error => {
-                    if (error.response) { // 4xx, 5xx itp.
-                        console.log("request error: ", error.response);
-                    }
-                    else if (error.request) { // no response
-                        console.log("no response error: ", error.request)
-                    }
-                    else {
-                        console.log("other error: ", error.message)
-                    }
-                    alert("Nie udało się przesłać pliku")
-                })
-
         }
         catch (err) {
             console.log("err: ", err)
             alert("Nie udało się pobrać pliku. ", err)
         }
-
     }
 
 

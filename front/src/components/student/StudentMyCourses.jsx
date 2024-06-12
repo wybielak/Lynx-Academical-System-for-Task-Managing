@@ -15,18 +15,11 @@ export default observer(function StudentMyCourses() {
     return (
         <div className='course-join'>
             <h1>Twoje kursy</h1>
-            {appStorage.coursesListWithStudent.map((course, index) => (
-                    <SingeCourse key={index} courseId={course.id} courseName={course.courseName} ownerId={course.ownerId} button1Display={'none'} button2Display={''} />
-                    // <div className='course-join-info' key={index}>
-                    //     <div>
-                    //         <h3>{course.courseName}</h3>
-                    //         <p>{course.ownerId}</p>
-                    //     </div>
-                    //     <button onClick={() => appStorage.addWaitingStudentToCourse(course.id, auth?.currentUser?.uid)}>Dołącz</button>
-                    // </div>
-                ))
 
-                }
+            {appStorage.coursesListWithStudent.map((course, index) => (
+                <SingeCourse key={index} courseId={course.id} courseName={course.courseName} ownerId={course.ownerId} button1Display={'none'} button2Display={''} />
+            ))}
+
         </div>
     )
 })
