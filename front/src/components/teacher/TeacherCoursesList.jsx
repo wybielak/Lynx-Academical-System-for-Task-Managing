@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { NavLink } from 'react-router-dom';
 
 import { useStore } from '../../mobx/Store'
 import TeacherCoursePanel from './TeacherCoursePanel';
@@ -22,12 +23,16 @@ export default observer(function TeacherCoursesList() {
                     <div className='courses-accept-info' key={course.id}>
 
                         <h3>{course.courseName}</h3>
-                        <button onClick={() => appStorage.handleSelectedCourse(course.id)}>Przejdź</button>
+                        {/* <button onClick={() => appStorage.handleSelectedCourse(course.id)}>Przejdź</button> */}
 
-                        {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id == course.id &&
+                        <NavLink to='/course-details-teacher' >
+                            <button onClick={() => appStorage.handleSelectedCourse(course.id)}>Przejdź</button>
+                        </NavLink>
+
+                        {/* {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id == course.id &&
                             //TODO przenoszenie na stronę kursu
                             <TeacherCoursePanel />
-                        }
+                        } */}
 
                     </div>
                 ))}

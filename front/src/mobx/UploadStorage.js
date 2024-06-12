@@ -1,8 +1,9 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
-import { getDocs, collection, query, where } from 'firebase/firestore'
+import { getDocs, collection, query, where} from 'firebase/firestore'
+import { doc, updateDoc} from 'firebase/firestore'
 
-import { db } from '../config/FirebaseConfig'
+import { auth, db } from '../config/FirebaseConfig'
 
 export default class UploadStorage {
 
@@ -19,6 +20,7 @@ export default class UploadStorage {
     tasksCollection = collection(db, 'tasks')
     courseTasks = []
     selectedTaskFull = ''
+    newDescription = ''
 
     setCourseTasks = (data) => {
         this.courseTasks = data
@@ -42,6 +44,7 @@ export default class UploadStorage {
             if (task.id == taskId) {
                 this.selectedTaskFull = task
                 console.log("selectedTask:", this.selectedTaskFull)
+                this.setNewDescription(task.taskDescription)
                 return
             }
         })
@@ -54,6 +57,26 @@ export default class UploadStorage {
 
     handleSelectedTask = (taskId) => {
         this.setSelectedTaskFull(taskId)
+    }
+
+    setNewDescription = (data) => {
+        this.newDescription = data
+    }
+
+    updateTaskDescription = async (taskId) => {
+
+        console.log("zmieniam taskDescription..", taskId, this.newDescription)
+        const courseRef = doc(db, "tasks", taskId)
+
+        await updateDoc(courseRef, {
+            taskDescription: this.newDescription
+        }).then(async () => {
+            // dla odświeżenia
+            await this.getCourseTasks()
+        }).then(() => {
+            return this.setSelectedTaskFull(taskId)
+        })
+        alert("Zaktualizowano")
     }
 
 
@@ -110,7 +133,7 @@ export default class UploadStorage {
 
                         if (numOfFilesUploaded == this.files.length) { // jeśli wszystkie wysłane
                             alert("Przesłano pliki.")
-                            console.log("Rrzesłano pliki")
+                            console.log("Przesłano pliki")
                             console.log("Czyszcze zmienną")
                             this.files = ""
                             console.log("Czyszcze input")
@@ -135,6 +158,60 @@ export default class UploadStorage {
         catch (err) {
             console.log("err: ", err)
             alert("Nie udało się przetworzyć i wysłać plików. ", err)
+        }
+
+    }
+
+    // download plików
+    downloadTask = async (courseName, studentName, taskName) => {
+
+        try {
+            const url = new URL(this.apiHost)
+            url.pathname = "/api/FileManager/downloadfile"
+            url.searchParams.append("_SubjectName", courseName)
+            url.searchParams.append("_StudentName", studentName)
+            url.searchParams.append("_TaskName", taskName)
+
+            console.log("Żądanie pobrania pliku:", url)
+            axios
+                .get(url, { responseType: 'blob' })
+                .then((response) => { // 2xx
+
+                    console.log("response:", response)
+                    console.log("Pobrano plik")
+
+                    // utworzenie URLa do pliku
+                    const fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                    const fileLink = document.createElement('a');
+
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute('download', taskName); // ustawienie nazwy pliku
+                    document.body.appendChild(fileLink);
+
+                    fileLink.click();
+
+                    // czyszczenie
+                    document.body.removeChild(fileLink);
+                    window.URL.revokeObjectURL(fileURL);
+
+                })
+                .catch(error => {
+                    if (error.response) { // 4xx, 5xx itp.
+                        console.log("request error: ", error.response);
+                    }
+                    else if (error.request) { // no response
+                        console.log("no response error: ", error.request)
+                    }
+                    else {
+                        console.log("other error: ", error.message)
+                    }
+                    alert("Nie udało się przesłać pliku")
+                })
+
+        }
+        catch (err) {
+            console.log("err: ", err)
+            alert("Nie udało się pobrać pliku. ", err)
         }
 
     }

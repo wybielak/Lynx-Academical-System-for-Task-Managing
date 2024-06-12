@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { NavLink } from 'react-router-dom';
 
 import { useStore } from '../../mobx/Store'
 import Header from '../Header';
@@ -21,7 +22,9 @@ export default observer(function TeacherCoursePanel() {
         <>
             <div className='teacher-content course'>
 
-                {/* <Header role='Teacher' userName={auth?.currentUser?.email} /> */}
+                <NavLink to='/' className='back-button'>
+                    <button onClick={() => appStorage.clearSelectedCourse()}>Back</button>
+                </NavLink>
 
                 <h1>Podgląd kursu</h1>
                 <h2> {appStorage.selectedCourseFull.courseName} </h2>
@@ -34,12 +37,16 @@ export default observer(function TeacherCoursePanel() {
 
                                 {task.taskName}
 
-                                <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button>
+                                {/* <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button> */}
 
-                                {uploadStorage.selectedTaskFull && uploadStorage.selectedTaskFull.id == task.id &&
+                                <NavLink to='/task-details-teacher' >
+                                    <button onClick={() => uploadStorage.handleSelectedTask(task.id)}>Przejdź</button>
+                                </NavLink>
+
+                                {/* {uploadStorage.selectedTaskFull && uploadStorage.selectedTaskFull.id == task.id &&
                                     //TODO przenoszenie na osobną stronę zadania
                                     <TeacherTaskPanel />
-                                }
+                                } */}
 
                             </div>
                         ))}

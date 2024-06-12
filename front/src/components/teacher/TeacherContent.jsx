@@ -1,6 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { observer } from 'mobx-react-lite'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { auth } from '../../config/FirebaseConfig'
 import { useStore } from '../../mobx/Store'
@@ -8,7 +9,23 @@ import AddUser from './AddUser'
 import AddCourse from './AddCourse'
 import TeacherCoursesList from './TeacherCoursesList'
 import TeacherCoursePanel from './TeacherCoursePanel'
+import TeacherTaskPanel from './TeacherTaskPanel'
 import Header from '../Header'
+
+const teacherRouter = createBrowserRouter([
+    {
+        path: '/',
+        element: <><TeacherCoursesList /> <AddCourse /> <AddUser /></>,
+    },
+    {
+        path: '/course-details-teacher',
+        element: <TeacherCoursePanel />,
+    },
+    {
+        path: '/task-details-teacher',
+        element: <TeacherTaskPanel />,
+    },
+]);
 
 export default observer(function TeacherContent() {
 
@@ -28,16 +45,18 @@ export default observer(function TeacherContent() {
 
                 <Header role='Teacher' userName={auth?.currentUser?.email} />
 
-                <TeacherCoursesList />
+                <RouterProvider router={teacherRouter} />
+
+                {/* <TeacherCoursesList /> */}
 
                 {/* {appStorage.selectedCourseFull && appStorage.selectedCourseFull.id && //NOTE 
                     //TODO przenoszenie na osobną stronę kursu
                     <TeacherCoursePanel />
                 } */}
 
-                <AddCourse />
+                {/* <AddCourse /> */}
 
-                <AddUser />
+                {/* <AddUser /> */}
 
             </div>
         </>

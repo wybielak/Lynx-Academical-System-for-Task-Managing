@@ -271,7 +271,7 @@ body, .main-container {
     margin: 5px 0;
 }
 
-.course-join-info button, .courses-accept-info button {
+.course-join-info button, .courses-accept-info button, .task button {
     align-self: center;
     padding: 10px 15px;
     background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
@@ -282,7 +282,7 @@ body, .main-container {
     transition: .1s;
 }
 
-.course-join-info button:hover, .courses-accept-info button:hover {
+.course-join-info button:hover, .courses-accept-info button:hover, .task button:hover {
     cursor: pointer;
     scale: 1.1;
 }
@@ -307,7 +307,7 @@ body, .main-container {
     margin-right: 20px;
 }
 
-.teacher-content .course .student-info button {
+.teacher-content .course .student-info button, .back-button button {
     align-self: center;
     padding: 5px 10px;
     background-image: linear-gradient(to right top, #474747, #494d53, #45555c, #405e5f, #43655a);
@@ -318,13 +318,59 @@ body, .main-container {
     transition: .1s;
 }
 
-.teacher-content .course .student-info button:hover {
+.teacher-content .course .student-info button:hover, .back-button button:hover {
     cursor: pointer;
     scale: 1.1;
 }
 
 .teacher-content .course .student-added {
     font-weight: bold;
+}
+
+.back-button button {
+    font-size: 1.1em;
+    position: absolute;
+    top: 70px;
+    left: 10px;
+}
+
+.name-mapper {
+    margin: 0;
+}
+
+.task {
+    padding: 5px 10px;
+    margin: 10px 0;
+    border: 1px solid var(--darkGray1);
+    border-radius: 15px;
+}
+
+.task div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.task p {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.upload-panel .info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.upload-panel h2 {
+    margin-bottom: 0;
 }
 
 /* .content {
@@ -339,10 +385,6 @@ body, .main-container {
 /* .course {
     background-color: var(--lightGray2);
 } */
-
-.task {
-    background-color: var(--lightGray2);
-} 
 
 
 
