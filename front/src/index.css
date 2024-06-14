@@ -346,7 +346,7 @@ body, .main-container {
 }
 
 .task div {
-    display: flex;
+    /* display: flex; */
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -372,6 +372,17 @@ body, .main-container {
 .upload-panel h2 {
     margin-bottom: 0;
 }
+
+
+
+/* .calender {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 500px;
+    background-color: #bbb;
+} */
+
+
 
 /* .content {
     background-color: var(--lightGray2);

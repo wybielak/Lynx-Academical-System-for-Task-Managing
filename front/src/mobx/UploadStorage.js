@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import { getDocs, collection, query, where } from 'firebase/firestore'
-import { doc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc, addDoc, deleteDoc } from 'firebase/firestore'
 
 import { auth, db } from '../config/FirebaseConfig'
 
@@ -20,7 +20,15 @@ export default class UploadStorage {
     tasksCollection = collection(db, 'tasks')
     courseTasks = []
     selectedTaskFull = ''
+
+    updatedTaskDescription = ''
+    updatedTaskDeadline = ''
+
+    taskRefreshing = false
+
+    newTaskName = ''
     newTaskDescription = ''
+    newTaskDeadline = ''
 
     setCourseTasks = (data) => {
         this.courseTasks = data
@@ -55,24 +63,23 @@ export default class UploadStorage {
         this.courseTasks.map((task) => {
             if (task.id == taskId) {
                 this.setSelectedTaskFull(task)
-                this.setNewTaskDescription(task.taskDescription)
-                // console.log("newTaskDescription:", this.newTaskDescription)
+                this.setUpdatedTaskDescription(task.taskDescription)
+                this.setUpdatedTaskDeadline(new Date(task.taskDeadline.seconds * 1000))
             }
         })
     }
 
-    setNewTaskDescription = (data) => {
-        this.newTaskDescription = data
-    }
-
+    // zaktualizuj opis taska - nauczyciel - robi zmiane w bazie, pobiera i ustawia lokalnie
     updateTaskDescription = async (taskFull) => {
 
-        console.log("zmieniam taskDescription..", taskFull.id, this.newTaskDescription)
-        const courseRef = doc(db, "tasks", taskFull.id,)
+        console.log("zmieniam taskDescription..", taskFull.id, this.updatedTaskDescription)
+        const courseRef = doc(db, "tasks", taskFull.id)
+
+        this.setTaskRefreshing(true)
 
         // w bazie
         await updateDoc(courseRef, {
-            taskDescription: this.newTaskDescription
+            taskDescription: this.updatedTaskDescription
         })
             .then(async () => {
                 await this.appStorage.getMyCourses()
@@ -81,12 +88,95 @@ export default class UploadStorage {
                 await this.getCourseTasks()
             })
             .then(() => {
-                // lokalnie
+                // dla odświeżenia lokalnie
                 this.handleSelectTask(taskFull.id)
             })
-            .finally(
+            .finally(() => {
+                this.setTaskRefreshing(false)
                 alert("Zaktualizowano")
-            )
+            })
+    }
+
+    // zaktualizuj deadlina taska - nauczyciel - robi zmiane w bazie, pobiera i ustawia lokalnie
+    updateTaskDeadline = async (taskFull) => {
+
+        console.log("zmieniam taskDeadline..", taskFull.id, this.updatedTaskDeadline)
+        const courseRef = doc(db, "tasks", taskFull.id)
+
+        this.setTaskRefreshing(true)
+
+        // w bazie
+        await updateDoc(courseRef, {
+            taskDeadline: this.updatedTaskDeadline
+        })
+            .then(async () => {
+                await this.appStorage.getMyCourses()
+            })
+            .then(async () => {
+                await this.getCourseTasks()
+            })
+            .then(() => {
+                // dla odświeżenia lokalnie
+                this.handleSelectTask(taskFull.id)
+            })
+            .finally(() => {
+                this.setTaskRefreshing(false)
+                alert("Zaktualizowano")
+            })
+    }
+
+    // tworzenie nowego taksa
+    createNewTask = async () => {
+
+        console.log("tworze nowego taska: ", this.newTaskName, this.newTaskDescription, this.newTaskDeadline)
+
+        await addDoc(this.tasksCollection, {
+            courseId: this.appStorage.selectedCourseFull.id,
+            ownerId: auth.currentUser.uid,
+            taskName: this.newTaskName,
+            taskDescription: this.newTaskDescription,
+            taskDeadline: this.newTaskDeadline,
+            studentsIdsWhoSubmitted: []
+        })
+            .then((res) => {
+                console.log("Utworzono nowego taska z id: ", res.id);
+                alert("Utworzono zadanie")
+                console.log("Czyszcze zmienną")
+                this.setNewTaskName('')
+                this.setNewTaskDescription('')
+                this.setNewTaskDeadline('')
+            })
+    }
+
+    // usuwanie (wybranego) taska
+    deleteTask = async (taskId) => {
+        console.log("Usuwam taska ", taskId)
+        await deleteDoc(doc(db, "tasks", taskId));
+        alert("Usunięto zadanie")
+    }
+
+    setTaskRefreshing = (bul) => {
+        this.taskRefreshing = bul
+    }
+
+    setUpdatedTaskDescription = (data) => {
+        this.updatedTaskDescription = data
+    }
+
+    setUpdatedTaskDeadline = (data) => {
+        this.updatedTaskDeadline = data
+    }
+
+    setNewTaskDeadline = (data) => {
+        this.newTaskDeadline = data
+    }
+
+    setNewTaskDescription = (data) => {
+        this.newTaskDescription = data
+    }
+
+    setNewTaskName = (data) => {
+        this.newTaskName = data
     }
 
 
@@ -102,7 +192,7 @@ export default class UploadStorage {
         if (e.target.files && e.target.files.length > 0) {
             this.setFiles(e.target.files)
         }
-        console.log(this.files)
+        console.log("na:", this.files)
 
     }
 

@@ -2,8 +2,8 @@ import { makeAutoObservable } from "mobx";  // kolejnosc importow - najpierw sta
 import { signOut } from 'firebase/auth'     // i zewnetrzne
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { addDoc, doc } from 'firebase/firestore'
-import { getDocs, getDoc, collection, query, where } from 'firebase/firestore'
+import { addDoc, getDoc, getDocs, deleteDoc } from 'firebase/firestore'
+import { doc, collection, query, where } from 'firebase/firestore'
 import { updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 import { db } from '../config/FirebaseConfig'   // potem te "nasze"
@@ -162,10 +162,9 @@ export default class AppStorage {
     // tworzenie nowego kursu
     createNewCourse = async () => {
 
-        const docRef = await addDoc(collection(db, "courses"), { // #TODO refractor
+        await addDoc(collection(db, "courses"), {
             courseName: this.newCourseName,
             ownerId: auth.currentUser.uid,
-            // ownerName: auth.currentUser.email,
             studentsIds: [],
             waitingStudentsIds: [],
         }).then((res) => {
@@ -173,16 +172,19 @@ export default class AppStorage {
             alert("Utworzono kurs")
             console.log("Czyszcze zmienną")
             this.setNewCourseName('')
-            this.getMyCourses() // ANCHOR !
-            // console.log("czyszcze input")
-            // document.getElementById("filesUpload").value = ""
+            this.getMyCourses()
         })
+    }
+
+    // usunięcie kursu
+    deleteCourse = async (courseId) => {
+        console.log("Usuwam kurs ", courseId)
+        await deleteDoc(doc(db, "courses", courseId));
+        alert("Usunięto kurs")
     }
 
     setMyCourses = (data) => {
         this.myCourses = data
-        // console.log("myCourses:")
-        // this.showMapVariableIDsPlus(this.myCourses)
     }
 
     // wylistowanie swoich kursów - nauczyciel
@@ -276,23 +278,12 @@ export default class AppStorage {
         }
     }
 
-    // getCurrentCourseData = (id) => {  // TODO
-    //     // this.clearSelectedCourse()
-    //     this.coursesListWithStudent.map((course) => {
-    //         if (course.id == id) {
-    //             //this.selectedCourseFull = course
-    //             console.log(course.courseName)
-    //         }
-    //     })
-    //     //console.log("selectedCourse:", this.selectedCourseFull)
-    // }
-
     // dołączanie do wybranego kursu - student
     addWaitingStudentToCourse = async (courseid, studentid) => {
         try {
 
-            console.log(courseid)
-            console.log(studentid)
+            // console.log(courseid)
+            // console.log(studentid)
 
             const ref = collection(db, 'courses')
 
@@ -308,7 +299,7 @@ export default class AppStorage {
                     }
                 }
 
-                console.log(course)
+                // console.log(course)
 
                 var oldWaiting = course.waitingStudentsIds
 
@@ -353,7 +344,7 @@ export default class AppStorage {
             }
 
             this.setCoursesListWithWaitingStudent(filteredData2)
-            console.log(filteredData2)
+            // console.log(filteredData2)
 
         } catch (err) {
             console.error(err)
@@ -382,6 +373,7 @@ export default class AppStorage {
         console.log("selectedCourseFull:", this.selectedCourseFull)
     }
 
+    // zaakceptowanie oczekującego studenta - nauczyciel
     addStudentToCourse = async (course, studentId) => {
 
         console.log("dodaję..", course.id, studentId)
@@ -392,13 +384,14 @@ export default class AppStorage {
             waitingStudentsIds: arrayRemove(studentId)
         })
             .then(async () => {
-                // dla odświeżenia
+                // dla odświeżenia lokalnie
                 await this.getMyCourses()
             })
             .then(() => {
+                this.handleSelectCourse(course.id)
+            }).finally(() =>
                 alert("Dodano")
-                return this.setSelectedCourseFull(course.id)
-            })
+            )
     }
 
     // // pobranie danych od studentach (id, nazwa, ...), który należą (lub chcą należeć) do wybranego kursu - nauczyciel

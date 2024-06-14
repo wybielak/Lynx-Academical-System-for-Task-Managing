@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { NavLink, Navigate } from 'react-router-dom';
+import { NavLink, Navigate, useNavigate } from 'react-router-dom';
 
 import { useStore } from '../../mobx/Store'
 import IdToNameMaper from '../IdToNameMaper';
+import AddTask from './AddTask';
 
 export default observer(function TeacherCoursePanel() {
 
@@ -22,6 +23,8 @@ export default observer(function TeacherCoursePanel() {
 
     }, [])
 
+    let navigate = useNavigate();
+
     return (
         <>
             {!appStorage.selectedCourseFull ?
@@ -36,6 +39,8 @@ export default observer(function TeacherCoursePanel() {
                         <NavLink to='/' className='back-button'>
                             <button onClick={() => appStorage.clearSelectedCourseFull()}>Back</button>
                         </NavLink>
+
+                        <button type="button" onClick={() => {appStorage.deleteCourse(appStorage.selectedCourseFull.id).then(() => {navigate('/', { replace: true })})}}> Delete course </button>
 
                         <h1>Podgląd kursu</h1>
                         <h2> {appStorage.selectedCourseFull.courseName} </h2>
@@ -53,6 +58,13 @@ export default observer(function TeacherCoursePanel() {
                                 ))}
                             </div>
                         }
+
+                        <div className="student-info" >
+                            Stwórz nowe zadanie
+                            <NavLink to='/create-task-teacher' >
+                                <button> Przejdź </button>
+                            </NavLink>
+                        </div>
 
                         <h3> Oczekujący studenci </h3>
                         {appStorage.selectedCourseFull.waitingStudentsIds && appStorage.selectedCourseFull.waitingStudentsIds.length > 0 &&

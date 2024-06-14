@@ -9,6 +9,7 @@ import AddCourse from './AddCourse'
 import TeacherCoursesList from './TeacherCoursesList'
 import TeacherCoursePanel from './TeacherCoursePanel'
 import TeacherTaskPanel from './TeacherTaskPanel'
+import AddTask from './AddTask'
 import Header from '../Header'
 
 const teacherRouter = createBrowserRouter([
@@ -23,6 +24,10 @@ const teacherRouter = createBrowserRouter([
     {
         path: '/task-details-teacher',
         element: <TeacherTaskPanel />,
+    },
+    {
+        path: '/create-task-teacher',
+        element: <AddTask />,
     },
 ]);
 

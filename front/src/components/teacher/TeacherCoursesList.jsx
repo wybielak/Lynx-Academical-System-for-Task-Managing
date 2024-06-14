@@ -11,6 +11,7 @@ export default observer(function TeacherCoursesList() {
     useEffect(() => {
 
         appStorage.clearSelectedCourseFull()
+        appStorage.getMyCourses()
 
     }, [])
 

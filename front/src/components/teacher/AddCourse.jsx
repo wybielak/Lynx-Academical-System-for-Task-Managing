@@ -27,9 +27,7 @@ export default observer(function AddCourse() {
                         />
                     </div>
                     <button type="button" onClick={appStorage.createNewCourse}>Create</button>
-
                 </form>
-
 
             </div>
         </>
