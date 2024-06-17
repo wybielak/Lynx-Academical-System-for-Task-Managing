@@ -15,7 +15,7 @@ export default observer(function AddCourse() {
 
                 <form>
                     <div>
-                        <label>Nazwa kursu </label>
+                        <label>Course name </label>
 
                         <input type="text" value={appStorage.newCourseName}
                             onChange={(e) => { appStorage.setNewCourseName(e.target.value) }}
@@ -27,9 +27,7 @@ export default observer(function AddCourse() {
                         />
                     </div>
                     <button type="button" onClick={appStorage.createNewCourse}>Create</button>
-
                 </form>
-
 
             </div>
         </>

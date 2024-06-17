@@ -2,8 +2,8 @@ import { makeAutoObservable } from "mobx";  // kolejnosc importow - najpierw sta
 import { signOut } from 'firebase/auth'     // i zewnetrzne
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { addDoc, doc, getDoc } from 'firebase/firestore'
-import { getDocs, collection, query, where } from 'firebase/firestore'
+import { addDoc, getDoc, getDocs, deleteDoc } from 'firebase/firestore'
+import { doc, collection, query, where } from 'firebase/firestore'
 import { updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'
 
 import { db } from '../config/FirebaseConfig'   // potem te "nasze"
@@ -14,10 +14,6 @@ export default class AppStorage {
     constructor() {
         makeAutoObservable(this)
     }
-
-    // ########################## .Net API URL ##########################
-    apiHost = "https://localhost:7227"
-
 
     // ########################## ROLE ##########################
 
@@ -43,12 +39,10 @@ export default class AppStorage {
 
     getNameById = async (id) => {
         try {
-            if (id !== undefined) {
-                const roleQuery = query(this.rolesCollection, where("userId", "==", id))
-                const data = await getDocs(roleQuery)
-                const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
-                return filteredData[0].name
-            }
+            const roleQuery = query(this.rolesCollection, where("userId", "==", id))
+            const data = await getDocs(roleQuery)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data() }))
+            return filteredData[0].name
         } catch (err) {
             console.log(err)
         }
@@ -108,8 +102,6 @@ export default class AppStorage {
     logIn = async () => {
         try {
             await signInWithEmailAndPassword(auth, this.email, this.password)
-            this.onChangeEmail('')
-            this.onChangePassword('')
             console.log("Zalogowano")
         } catch (err) {
             console.error(err)
@@ -119,19 +111,19 @@ export default class AppStorage {
     logOut = async () => {
         try {
             await signOut(auth)
-            this.onChangeEmail('')
-            this.onChangePassword('')
+            this.email = ''
+            this.password = ''
             console.log("Nastąpiło wylogowanie")
         } catch (err) {
             console.log(err)
         }
     }
 
-    // ustawienie studentów (id, nazwa, ...)
+    // ustawienie moich studentów z kursu (id, nazwa, ...) - nauczyciel
     setMyStudentsWithData = (data) => {
         this.myStudentsWithData = data
-        console.log("myStudentsWithData:")
-        this.showMapVariableIDsPlus(this.myStudentsWithData)
+        // console.log("myStudentsWithData:")
+        // this.showMapVariableIDsPlus(this.myStudentsWithData)
     }
 
     // getStudentById = (id) => {
@@ -148,20 +140,22 @@ export default class AppStorage {
     // ########################## KURSY ##########################
 
     coursesCollection = collection(db, 'courses')
-    tasksCollection = collection(db, 'tasks')
-    myCourses = [] // #TODO trzeba to jakoś lepiej ogarnąć/ujednolicić 
+    tasksCollection = collection(db, 'tasks') // yo #w, #NOTE jo mom to już w UploadStorage.js!
+    myCourses = [] // #TODO możnaby ujednolicić 
+
     coursesListWithoutStudent = [] // #w
     coursesListWithWaitingStudent = [] // #w
     coursesListWithStudent = [] // #w
-    tasksListCourse = []
+    tasksListCourse = [] // #w
+
     newCourseName = ''
     selectedCourseFull = ''
 
-    currentCourseId = ''
-    currentCourseData = ''
+    currentCourseId = '' // #w
+    currentCourseData = '' // #w
 
-    currentTaskId = ''
-    currentTaskData = ''
+    currentTaskId = '' // #w
+    currentTaskData = '' // #w
 
     setNewCourseName = (name) => {
         this.newCourseName = name
@@ -170,10 +164,9 @@ export default class AppStorage {
     // tworzenie nowego kursu
     createNewCourse = async () => {
 
-        const docRef = await addDoc(collection(db, "courses"), { // #TODO refractor
+        await addDoc(collection(db, "courses"), {
             courseName: this.newCourseName,
             ownerId: auth.currentUser.uid,
-            // ownerName: auth.currentUser.email,
             studentsIds: [],
             waitingStudentsIds: [],
         }).then((res) => {
@@ -181,16 +174,19 @@ export default class AppStorage {
             alert("Utworzono kurs")
             console.log("Czyszcze zmienną")
             this.setNewCourseName('')
-            this.getMyCourses() // ANCHOR !
-            // console.log("czyszcze input")
-            // document.getElementById("filesUpload").value = ""
+            this.getMyCourses()
         })
     }
 
-    setMyCourses = (coursesData) => {
-        this.myCourses = coursesData
-        console.log("myCourses:")
-        this.showMapVariableIDsPlus(this.myCourses)
+    // usunięcie kursu
+    deleteCourse = async (courseId) => {
+        console.log("Usuwam kurs ", courseId)
+        await deleteDoc(doc(db, "courses", courseId));
+        alert("Usunięto kurs")
+    }
+
+    setMyCourses = (data) => {
+        this.myCourses = data
     }
 
     // wylistowanie swoich kursów - nauczyciel
@@ -201,12 +197,15 @@ export default class AppStorage {
             const courseQuery = query(this.coursesCollection, where("ownerId", "==", auth?.currentUser?.uid))
             const data = await getDocs(courseQuery)
             const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id })) //NOTE - ważne, dopisanie ID
+
             this.setMyCourses(filteredData)
+
         } catch (err) {
             console.log(err)
         }
     }
 
+    // student
     setCoursesListWithoutStudent = (coursesData) => {
         this.coursesListWithoutStudent = coursesData
         console.log("Ustawiono zmienną setCoursesListWithoutStudent")
@@ -251,6 +250,7 @@ export default class AppStorage {
         }
     }
 
+    // student
     setCoursesListWithStudent = (coursesData) => {
         this.coursesListWithStudent = coursesData
         console.log("Ustawiono zmienną setCoursesListWithStudent")
@@ -284,8 +284,8 @@ export default class AppStorage {
     addWaitingStudentToCourse = async (courseid, studentid) => {
         try {
 
-            console.log(courseid)
-            console.log(studentid)
+            // console.log(courseid)
+            // console.log(studentid)
 
             const ref = collection(db, 'courses')
 
@@ -301,7 +301,7 @@ export default class AppStorage {
                     }
                 }
 
-                console.log(course)
+                // console.log(course)
 
                 var oldWaiting = course.waitingStudentsIds
 
@@ -346,7 +346,7 @@ export default class AppStorage {
             }
 
             this.setCoursesListWithWaitingStudent(filteredData2)
-            console.log(filteredData2)
+            // console.log(filteredData2)
 
         } catch (err) {
             console.error(err)
@@ -354,27 +354,28 @@ export default class AppStorage {
     }
 
     // wybór kursu 
-    setSelectedCourseFull = (id) => {
+    setSelectedCourseFull = (data) => {
+        // this.clearSelectedCourse()
+        this.selectedCourseFull = data
+        console.log("selectedCourseFull:", this.selectedCourseFull)
+    }
+
+    clearSelectedCourseFull = () => { //NOTE - do poprawienia/sprawdzenia czy działa przy przełączaniu między stronami
+        this.selectedCourseFull = ''
+        console.log("czyszczę selectedCourseFull")
+    }
+
+    handleSelectCourse = (courseId) => {
         // this.clearSelectedCourse()
         this.myCourses.map((course) => {
-            if (course.id == id) {
-                this.selectedCourseFull = course
+            if (course.id == courseId) {
+                this.setSelectedCourseFull(course)
             }
         })
-        console.log("selectedCourse:", this.selectedCourseFull)
+        console.log("selectedCourseFull:", this.selectedCourseFull)
     }
 
-    clearSelectedCourse = () => {
-        console.log("czyszczę wybrany kurs")
-        this.selectedCourseFull = ''
-        // this.waitingStudentsInCourse = []
-        // this.studentsInCourse = []
-    }
-
-    handleSelectedCourseId = (courseId) => {
-        this.setSelectedCourseFull(courseId) // tymczasowo tak tylko tyle
-    }
-
+    // zaakceptowanie oczekującego studenta - nauczyciel
     addStudentToCourse = async (course, studentId) => {
 
         console.log("dodaję..", course.id, studentId)
@@ -383,34 +384,42 @@ export default class AppStorage {
         await updateDoc(courseRef, {
             studentsIds: arrayUnion(studentId),
             waitingStudentsIds: arrayRemove(studentId)
-        }).then(async () => {
-            // dla odświeżenia
-            await this.getMyCourses()
-        }).then(() => {
-            return this.setSelectedCourseFull(course.id)
         })
-        alert("Dodano")
+            .then(async () => {
+                // dla odświeżenia lokalnie
+                await this.getMyCourses()
+            })
+            .then(() => {
+                this.handleSelectCourse(course.id)
+            }).finally(() =>
+                alert("Dodano")
+            )
     }
 
-    // pobranie danych od studentach (id, nazwa, ...), który należą (lub chcą należeć) do wybranego kursu - nauczyciel
-    loadAllStudentsDataInCourse = async () => {
-        try {
-            const allIds = this.selectedCourseFull.studentsIds.concat(this.selectedCourseFull.waitingStudentsIds)
-            // console.log("allIds:", allIds)
-            if (allIds.length > 0) {
-                var students = []
-                const studentsWithData = query(this.rolesCollection, where("userId", "in", allIds));
-                const querySnapshot = await getDocs(studentsWithData)
-                querySnapshot.forEach((doc) => {
-                    // console.log("student:", doc.id, ' ', doc.data())
-                    students.push(doc.data()) // role: , name: , userId: 
-                })
-                this.setMyStudentsWithData(students)
-            }
-        } catch (err) {
-            console.log(err)
-        }
-    }
+    // // pobranie danych od studentach (id, nazwa, ...), który należą (lub chcą należeć) do wybranego kursu - nauczyciel
+    // loadAllStudentsDataInCourse = async () => {
+    //     try {
+    //         const allIds = this.selectedCourseFull.studentsIds.concat(this.selectedCourseFull.waitingStudentsIds)
+    //         // console.log("allIds:", allIds)
+
+    //         if (allIds.length > 0) {
+
+    //             var students = []
+    //             const studentsWithData = query(this.rolesCollection, where("userId", "in", allIds));
+    //             const querySnapshot = await getDocs(studentsWithData)
+
+    //             querySnapshot.forEach((doc) => {
+    //                 // console.log("student:", doc.id, ' ', doc.data())
+    //                 students.push(doc.data()) // role: , name: , userId: 
+    //             })
+
+    //             this.setMyStudentsWithData(students)
+
+    //         }
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     // Wyświetlanie szczegółów kursu - student #ANCHOR
 

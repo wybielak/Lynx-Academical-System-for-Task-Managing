@@ -1,0 +1,15 @@
+fixnięte:
+> odświeżanie po zaakceptowaniu studenta do kursu
+
+dodane:
+> możliwość edycji opisu i deadline'a zadania
+> możliwość stworzenia nowego zadania (dodanie <AddTask>)
+> możliwość usunięcia zadania
+> możliwość usunięcia kursu
+
+TO FIX: 
+> Enter na 'Course name' <input> robi nieintencjonalnie odświeżenie strony
+
+TO DO: 
+> przy usuwaniu kursu dodać usuwanie też jego zadań
+> CSS

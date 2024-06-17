@@ -10,7 +10,7 @@ export default observer(function IdToNameMaper({ id }) {
     const [nameLoading, setNameLoading] = useState(false)
 
     useEffect(() => {
-        console.log(id)
+        // console.log(id)
         setNameLoading(true)
         appStorage.getNameById(id).then((name) => {
             setName(name)

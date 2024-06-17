@@ -31,7 +31,7 @@ export default observer(function StudentUploadPanel() {
 
                     <div className='info'>
                     {!loading ? <IdToNameMaper id={appStorage.currentTaskData.ownerId} /> : ''}
-                        <p>Termin do: {appStorage.currentTaskData.taskDeadline}</p>
+                        <p>Termin do: {new Date(appStorage.currentTaskData.taskDeadline * 1000).toLocaleTimeString('pl-PL',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
                     </div>
 
                     <p>{appStorage.currentTaskData.taskDescription}</p>

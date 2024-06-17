@@ -34,7 +34,7 @@ export default observer(function StudentCoursePanel() {
                             <div className='task' key={index}>
                                 <div>
                                     <h3>{task.taskName}</h3>
-                                    <p>{task.taskDeadline}</p>
+                                    <p>{new Date(task.taskDeadline.seconds * 1000).toLocaleTimeString('pl-PL',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
                                 </div>
                                 <p>{task.taskDescription}</p>
                                 <NavLink to='/task-details-student'>
@@ -44,7 +44,8 @@ export default observer(function StudentCoursePanel() {
                         ))}
                     </div>
 
-                </div>}
+                </div>
+            }
         </>
     )
 })
