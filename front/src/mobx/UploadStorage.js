@@ -197,7 +197,7 @@ export default class UploadStorage {
     }
 
     // upload plików
-    submitFiles = async () => {
+    submitFiles = async (coursename, studentname, taskname) => {
 
         try {
 
@@ -208,9 +208,9 @@ export default class UploadStorage {
             const url = new URL(this.apiHost)
             url.pathname = "/api/FileManager/uploadfile"
             // #hardcoded (for now)
-            url.searchParams.append("_SubjectName", "Zielonka_Programowanie")
-            url.searchParams.append("_StudentName", "Gesiek")
-            url.searchParams.append("_TaskName", "Zad1")
+            url.searchParams.append("_SubjectName", coursename)
+            url.searchParams.append("_StudentName", studentname)
+            url.searchParams.append("_TaskName", taskname)
 
             var numOfFilesUploaded = 0
             for (let i = 0; i < this.files.length; i++) {

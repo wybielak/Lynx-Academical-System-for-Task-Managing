@@ -487,6 +487,73 @@ export default class AppStorage {
     }
 
 
+    addStudentToSubmitted = async (taskid, studentid) => {
+        try {
+
+            const ref = collection(db, 'tasks')
+
+            await getDocs(ref).then((data) => {
+                const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+                var task = null
+
+                for (var i = 0; i < filteredData.length; i++) {
+                    if (taskid == filteredData[i].id) {
+                        task = filteredData[i]
+                        break
+                    }
+                }
+
+                var oldsubmitted = task.studentsIdsWhoSubmitted
+
+                if (!oldsubmitted) oldsubmitted = []
+
+                updateDoc(doc(db, "tasks", task.id), {
+                    studentsIdsWhoSubmitted: [...oldsubmitted, studentid]
+                }).then(() => {
+                    console.log('Dodano id studenta do submitted')
+                })
+            })
+
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    checker = false
+
+    checkStudentToSubmitted = async (studentid) => {
+        try {
+
+            const ref = collection(db, 'tasks')
+
+            await getDocs(ref).then((data) => {
+                const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+
+                var task = null
+
+                for (var i = 0; i < filteredData.length; i++) {
+                    if (this.currentTaskId == filteredData[i].id) {
+                        task = filteredData[i]
+                        break
+                    }
+                }
+                
+                console.log(task.studentsIdsWhoSubmitted.includes(studentid))
+                if (task.studentsIdsWhoSubmitted.includes(studentid)) {
+                    this.checker = true
+                } else {
+                    this.checker = false
+                }
+            })
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+
     // ########################## DEBUG ##########################
 
     showRoles = async () => {

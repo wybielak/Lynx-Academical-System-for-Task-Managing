@@ -14,6 +14,7 @@ export default observer(function StudentUploadPanel() {
     useEffect(() => {
         setLoading(true)
         appStorage.getCurrentTaskData().then(() => setLoading(false))
+        appStorage.checkStudentToSubmitted(auth?.currentUser?.uid)
     }, [])
 
     return (
@@ -30,16 +31,18 @@ export default observer(function StudentUploadPanel() {
                     <h2>{appStorage.currentTaskData.taskName}</h2>
 
                     <div className='info'>
-                    {!loading ? <IdToNameMaper id={appStorage.currentTaskData.ownerId} /> : ''}
-                        <p>Termin do: {new Date(appStorage.currentTaskData.taskDeadline * 1000).toLocaleTimeString('pl-PL',{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
+                        {!loading ? <IdToNameMaper id={appStorage.currentTaskData.ownerId} /> : ''}
+                        <p>Termin do: {new Date(appStorage.currentTaskData.taskDeadline * 1000).toLocaleTimeString('pl-PL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
                     </div>
 
                     <p>{appStorage.currentTaskData.taskDescription}</p>
 
-                    <div>
-                        <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
-                        <button onClick={() => uploadStorage.submitFiles(appStorage.currentCourseData.courseName, auth?.currentUser.email, appStorage.currentTaskData.taskName)}>Prześlij</button>
-                    </div>
+                    {appStorage.checker == true ? <p style={{color: 'green', fontWeight: 'bold'}}>Przesłano twoją odpowiedź</p> :
+                        <div>
+                            <input type='file' multiple id="filesUpload" onChange={(e) => uploadStorage.onChangeFile(e)} />
+                            <button onClick={() => { uploadStorage.submitFiles(appStorage.currentCourseData.courseName, auth?.currentUser.email, appStorage.currentTaskData.taskName); appStorage.addStudentToSubmitted(appStorage.currentTaskData.id, auth?.currentUser.uid) }}>Prześlij</button>
+                        </div>
+                    }
 
                 </div>}
         </>
