@@ -111,6 +111,8 @@ export default class AppStorage {
     logOut = async () => {
         try {
             await signOut(auth)
+            this.email = ''
+            this.password = ''
             console.log("Nastąpiło wylogowanie")
         } catch (err) {
             console.log(err)
