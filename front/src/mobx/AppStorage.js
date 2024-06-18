@@ -76,14 +76,21 @@ export default class AppStorage {
     // tworzenie nowego uzytkownika
     signIn = async () => {
         console.log("Próbuje stworzyć użytkownika: ", this.newUserEmail, this.newUserPassword, this.newUserRole)
+        let originalUser = auth.currentUser
         try {
             createUserWithEmailAndPassword(auth, this.newUserEmail, this.newUserPassword)
                 .then((createdUser) => {
                     addDoc(this.rolesCollection, { userId: createdUser.user.uid, name: createdUser.user.email, role: this.newUserRole })
                     console.log("Utworzono nowego użytkownika")
+                    auth.updateCurrentUser(originalUser)
+                    alert("Utworzono nowego użytkownika")
                 })
-        } catch (err) {
-            console.error(err)
+                .catch((err) => {
+                    console.log("err: ", err.message)
+                    alert("Nie udało się utworzyć nowego użytkownika")
+                })
+            } catch (err) {
+                console.log("err")
         }
         console.log("Czyszcze inputy")
         this.setNewUserEmail('')
@@ -539,7 +546,7 @@ export default class AppStorage {
                         break
                     }
                 }
-                
+
                 console.log(task.studentsIdsWhoSubmitted.includes(studentid))
                 if (task.studentsIdsWhoSubmitted.includes(studentid)) {
                     this.checker = true

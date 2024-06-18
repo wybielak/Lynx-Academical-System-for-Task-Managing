@@ -1,25 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\",
+  "WorkspaceRootPath": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|e:\\projects\\programming\\react\\lynx-astm\\back\\lynxfileapi\\lynxfileapi\\services\\managefile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|c:\\users\\gesie\\astudia_repos\\lynx-master\\back\\lynxfileapi\\lynxfileapi\\services\\managefile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|solutionrelative:lynxfileapi\\services\\managefile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|e:\\projects\\programming\\react\\lynx-astm\\back\\lynxfileapi\\lynxfileapi\\controllers\\filemanagercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|c:\\users\\gesie\\astudia_repos\\lynx-master\\back\\lynxfileapi\\lynxfileapi\\controllers\\filemanagercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|solutionrelative:lynxfileapi\\controllers\\filemanagercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|e:\\projects\\programming\\react\\lynx-astm\\back\\lynxfileapi\\lynxfileapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|c:\\users\\gesie\\astudia_repos\\lynx-master\\back\\lynxfileapi\\lynxfileapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|solutionrelative:lynxfileapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|e:\\projects\\programming\\react\\lynx-astm\\back\\lynxfileapi\\lynxfileapi\\helper\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|c:\\users\\gesie\\astudia_repos\\lynx-master\\back\\lynxfileapi\\lynxfileapi\\helper\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|solutionrelative:lynxfileapi\\helper\\common.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|e:\\projects\\programming\\react\\lynx-astm\\back\\lynxfileapi\\lynxfileapi\\services\\imanagefile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|c:\\users\\gesie\\astudia_repos\\lynx-master\\back\\lynxfileapi\\lynxfileapi\\services\\imanagefile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B08BDFD4-5730-488E-BE73-81AA2C5ABCA1}|lynxFileAPI\\lynxFileAPI.csproj|solutionrelative:lynxfileapi\\services\\imanagefile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -30,15 +30,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Common.cs",
-              "DocumentMoniker": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Helper\\Common.cs",
+              "DocumentMoniker": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Helper\\Common.cs",
               "RelativeDocumentMoniker": "lynxFileAPI\\Helper\\Common.cs",
-              "ToolTip": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Helper\\Common.cs",
+              "ToolTip": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Helper\\Common.cs",
               "RelativeToolTip": "lynxFileAPI\\Helper\\Common.cs",
               "ViewState": "AQIAABMAAAAAAAAAAAAiwCQAAABpAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -48,22 +52,21 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "FileManagerController.cs",
-              "DocumentMoniker": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Controllers\\FileManagerController.cs",
+              "DocumentMoniker": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Controllers\\FileManagerController.cs",
               "RelativeDocumentMoniker": "lynxFileAPI\\Controllers\\FileManagerController.cs",
-              "ToolTip": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Controllers\\FileManagerController.cs",
+              "ToolTip": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Controllers\\FileManagerController.cs",
               "RelativeToolTip": "lynxFileAPI\\Controllers\\FileManagerController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAB8AAABCAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-09T20:34:31.502Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-09T20:34:31.502Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "ManageFile.cs",
-              "DocumentMoniker": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Services\\ManageFile.cs",
+              "DocumentMoniker": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Services\\ManageFile.cs",
               "RelativeDocumentMoniker": "lynxFileAPI\\Services\\ManageFile.cs",
-              "ToolTip": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Services\\ManageFile.cs",
+              "ToolTip": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Services\\ManageFile.cs",
               "RelativeToolTip": "lynxFileAPI\\Services\\ManageFile.cs",
               "ViewState": "AQIAACsAAAAAAAAAAAAAAD4AAAA+AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -74,9 +77,9 @@
               "$type": "Document",
               "DocumentIndex": 4,
               "Title": "IManageFile.cs",
-              "DocumentMoniker": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Services\\IManageFile.cs",
+              "DocumentMoniker": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Services\\IManageFile.cs",
               "RelativeDocumentMoniker": "lynxFileAPI\\Services\\IManageFile.cs",
-              "ToolTip": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Services\\IManageFile.cs",
+              "ToolTip": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Services\\IManageFile.cs",
               "RelativeToolTip": "lynxFileAPI\\Services\\IManageFile.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAA0AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -86,14 +89,13 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Program.cs",
-              "DocumentMoniker": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Program.cs",
               "RelativeDocumentMoniker": "lynxFileAPI\\Program.cs",
-              "ToolTip": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\Program.cs",
               "RelativeToolTip": "lynxFileAPI\\Program.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-09T20:15:38.456Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-09T20:15:38.456Z"
             }
           ]
         }

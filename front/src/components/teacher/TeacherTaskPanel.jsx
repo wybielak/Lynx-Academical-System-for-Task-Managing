@@ -22,61 +22,77 @@ export default observer(function TeacherTaskPanel() {
             {!uploadStorage.selectedTaskFull ?
                 <Navigate to={'/'} />
                 :
-                <div className='teacher-content task'>
+                uploadStorage.taskRefreshing ? // do edycji-refreshu taska
+                    <div> Momencik... </div>
+                    :
+                    <div className='teacher-content task'>
 
-                    <NavLink to='/course-details-teacher' className='back-button'>
-                        <button onClick={() => uploadStorage.clearSelectedTaskFull()}>Back</button>
-                    </NavLink>
+                        <NavLink to='/course-details-teacher' className='back-button'>
+                            <button onClick={() => uploadStorage.clearSelectedTaskFull()}>Wróć</button>
+                        </NavLink>
 
-                    <h2> {uploadStorage.selectedTaskFull.taskName} </h2>
+                        <h2>
+                            {uploadStorage.selectedTaskFull.taskName} &nbsp;
+                            <button type="button" className='logOutButton'
+                                onClick={() => { uploadStorage.deleteTask(uploadStorage.selectedTaskFull.id).then(() => { navigate('/course-details-teacher', { replace: true }) }) }}>
+                                Usuń zadanie
+                            </button>
+                        </h2>
 
-                    {uploadStorage.taskRefreshing ? // do edycji taska
-                        <div> Wait... </div>
-                        :
-                        <div>
-                            <button type="button" onClick={() => {uploadStorage.deleteTask(uploadStorage.selectedTaskFull.id).then(() => {navigate('/course-details-teacher', { replace: true })})}}> Delete task </button>
-                            <p> Opis: {uploadStorage.selectedTaskFull.taskDescription} </p>
+                        <p> Opis: {uploadStorage.selectedTaskFull.taskDescription} </p>
 
-                            Edytuj: <textarea value={uploadStorage.updatedTaskDescription} cols={50} rows={3} onChange={(e) => uploadStorage.setUpdatedTaskDescription(e.target.value)}></textarea>
-                            <button onClick={() => uploadStorage.updateTaskDescription(uploadStorage.selectedTaskFull)}>Zapisz</button>
+                        Edytuj: <textarea value={uploadStorage.updatedTaskDescription} cols={50} rows={3} onChange={(e) => uploadStorage.setUpdatedTaskDescription(e.target.value)}></textarea>
+                        &nbsp;
+                        <button onClick={() => uploadStorage.updateTaskDescription(uploadStorage.selectedTaskFull)}>Zapisz</button>
 
-                            <p> Deadline:
+
+                        <p> Deadline: &nbsp;
                             {/* trza konwertować z timestampa na Date() */}
-                                {new Date(uploadStorage.selectedTaskFull.taskDeadline.seconds * 1000).toLocaleTimeString('pl-PL',
-                                    {
-                                        weekday: 'long',
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric',
-                                    }
-                                )}
-                            </p>
-                            <div className='calender'>
-                                Edytuj: <DatePicker
-                                    selected={uploadStorage.updatedTaskDeadline}
-                                    onChange={(date) => uploadStorage.setUpdatedTaskDeadline(date)}
-                                    // dateFormat="dd/MM/YYYY"
-                                    dateFormat="Pp"
-                                    placeholderText="Wybierz datę"
-                                    showTimeSelect
-                                    timeFormat='p'
-                                    timeIntervals={15}
-                                    locale="pl"
-                                />
-                                <button onClick={() => uploadStorage.updateTaskDeadline(uploadStorage.selectedTaskFull)}>Zapisz</button>
-                            </div>
-
-                            <h3> Przesłali: </h3>
-                            {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.map((studentId) => (
-                                <div className='teacher-content task' key={studentId}>
-                                    <IdToNameMaper id={studentId} />
-                                    <button onClick={() => uploadStorage.downloadTask(appStorage.selectedCourseFull.courseName, studentId, uploadStorage.selectedTaskFull.taskName)}> Pobierz </button>
-                                </div>
-                            ))}
-
+                            {new Date(uploadStorage.selectedTaskFull.taskDeadline.seconds * 1000).toLocaleTimeString('pl-PL',
+                                {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric',
+                                }
+                            )}
+                        </p>
+                        <div className='calender'>
+                            Edytuj: <DatePicker
+                                selected={uploadStorage.updatedTaskDeadline}
+                                onChange={(date) => uploadStorage.setUpdatedTaskDeadline(date)}
+                                // dateFormat="dd/MM/YYYY"
+                                dateFormat="Pp"
+                                placeholderText="Wybierz datę"
+                                showTimeSelect
+                                timeFormat='p'
+                                timeIntervals={15}
+                                locale="pl"
+                            />
+                            &nbsp;
+                            <button onClick={() => uploadStorage.updateTaskDeadline(uploadStorage.selectedTaskFull)}>Zapisz</button>
                         </div>
-                    }
-                </div>
+
+                        {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.length == 0 ?
+                            <h4>
+                                Brak przesłanych prac
+                            </h4>
+                            :
+                            <>
+                                <h3> Przesłali: </h3>
+                                {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.map((studentId) => (
+                                    <div className='course-join-info' key={studentId}>
+                                        <IdToNameMaper id={studentId} />
+                                        <button
+                                            onClick={() => uploadStorage.downloadTask(appStorage.selectedCourseFull.courseName, studentId, uploadStorage.selectedTaskFull.taskName)}>
+                                            Pobierz
+                                        </button>
+                                    </div>
+                                ))}
+                            </>
+                        }
+
+                    </div>
             }
         </>
     )

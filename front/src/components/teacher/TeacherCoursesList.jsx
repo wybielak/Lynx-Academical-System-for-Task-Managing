@@ -17,7 +17,7 @@ export default observer(function TeacherCoursesList() {
 
     return (
         <>
-            <h1>Your courses</h1>
+            <h1>Twoje kursy</h1>
 
             <div className='courses-accept'>
 

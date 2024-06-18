@@ -428,19 +428,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\dawid\\.nuget\\packages\\": {}
+    "C:\\Users\\gesie\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+      "projectUniqueName": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
       "projectName": "lynxFileAPI",
-      "projectPath": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
-      "packagesPath": "C:\\Users\\dawid\\.nuget\\packages\\",
-      "outputPath": "E:\\Projects\\programming\\react\\lynx-astm\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
+      "projectPath": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+      "packagesPath": "C:\\Users\\gesie\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\dawid\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\gesie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -495,7 +500,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

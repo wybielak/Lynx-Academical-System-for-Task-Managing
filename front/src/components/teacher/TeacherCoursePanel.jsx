@@ -32,24 +32,29 @@ export default observer(function TeacherCoursePanel() {
                 :
                 loading ?
                     // <div className='loadingScreen'> Wait... </div> // Hmm? //#REVIEW
-                    <div> Wait... </div>
+                    <div> Momencik... </div>
                     :
                     <div className='teacher-content course'>
 
                         <NavLink to='/' className='back-button'>
-                            <button onClick={() => appStorage.clearSelectedCourseFull()}>Back</button>
+                            <button onClick={() => appStorage.clearSelectedCourseFull()}>Wróć</button>
                         </NavLink>
 
-                        <button type="button" onClick={() => {appStorage.deleteCourse(appStorage.selectedCourseFull.id).then(() => {navigate('/', { replace: true })})}}> Delete course </button>
+                        <h1>
+                            Podgląd kursu &nbsp;
+                            <button type="button" className='logOutButton'
+                                onClick={() => { appStorage.deleteCourse(appStorage.selectedCourseFull.id).then(() => { navigate('/', { replace: true }) }) }}>
+                                Usuń kurs
+                            </button>
+                        </h1>
 
-                        <h1>Podgląd kursu</h1>
-                        <h2> {appStorage.selectedCourseFull.courseName} </h2>
+                        <h2> "{appStorage.selectedCourseFull.courseName}" </h2>
 
                         <h3>Zadania</h3>
                         {uploadStorage.courseTasks && uploadStorage.courseTasks.length > 0 &&
                             <div>
                                 {uploadStorage.courseTasks.map((task) => (
-                                    <div className="student-info" key={task.id}>
+                                    <div className="course-join-info" key={task.id}>
                                         {task.taskName}
                                         <NavLink to='/task-details-teacher' >
                                             <button onClick={() => uploadStorage.handleSelectTask(task.id)}>Przejdź</button>
@@ -60,9 +65,9 @@ export default observer(function TeacherCoursePanel() {
                         }
 
                         <div className="student-info" >
-                            Stwórz nowe zadanie
+                            Stwórz nowe zadanie &nbsp;
                             <NavLink to='/create-task-teacher' >
-                                <button> Przejdź </button>
+                                <button> + </button>
                             </NavLink>
                         </div>
 

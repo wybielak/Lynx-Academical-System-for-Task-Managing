@@ -11,11 +11,11 @@ export default observer(function AddCourse() {
         <>
             <div className='create-new-course'>
 
-                <h1>Create new course</h1>
+                <h1>Utwórz nowy kurs</h1>
 
                 <form>
                     <div>
-                        <label>Course name </label>
+                        <label>Nazwa kursu: </label>
 
                         <input type="text" value={appStorage.newCourseName}
                             onChange={(e) => { appStorage.setNewCourseName(e.target.value) }}
@@ -26,9 +26,8 @@ export default observer(function AddCourse() {
                             }}
                         />
                     </div>
-                    <button type="button" onClick={appStorage.createNewCourse}>Create</button>
+                    <button type="button" onClick={appStorage.createNewCourse}>Stwórz</button>
                 </form>
-
             </div>
         </>
     )

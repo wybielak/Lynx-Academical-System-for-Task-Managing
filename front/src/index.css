@@ -191,6 +191,7 @@ body, .main-container {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
+    text-align: center;
 }
 
 .create-user-main h1, .create-new-course h1 {
@@ -288,6 +289,7 @@ body, .main-container {
 }
 
 .teacher-content .course {
+    /* max-width: 400px; */
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
@@ -347,6 +349,7 @@ body, .main-container {
 
 .task div {
     /* display: flex; */
+    max-width: 500px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

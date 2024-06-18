@@ -26,36 +26,37 @@ export default observer(function AddTask() {
 
                 :
 
-                <div className=''>
+                // <div className='teacher-content course'>
+                <div className='task'>
 
                     <NavLink to='/course-details-teacher' className='back-button'>
-                        <button>Back</button>
+                        <button>Wróć</button>
                     </NavLink>
 
-                    <h1>Create new task</h1>
+                    <h1>Utwórz nowe zadanie</h1>
 
                     <form>
                         <div>
 
                             <div>
-                                <label> courseName: {appStorage.selectedCourseFull.courseName} </label>
+                                <label> Kurs: {appStorage.selectedCourseFull.courseName} </label>
                             </div>
 
                             <div>
-                                <label> taskName </label>
+                                <label> Nazwa zadania </label>
                                 <input type="text" value={uploadStorage.newTaskName}
                                     onChange={(e) => { uploadStorage.setNewTaskName(e.target.value) }}
                                 />
                             </div>
 
                             <div>
-                                <label> taskDescription </label>
+                                <label> Opis zadania </label>
                                 <textarea value={uploadStorage.newTaskDescription} cols={50} rows={3}
                                     onChange={(e) => uploadStorage.setNewTaskDescription(e.target.value)}></textarea>
                             </div>
 
                             <div>
-                                <label> taskDeadline </label>
+                                <label> Deadline: </label>
                                 <DatePicker
                                     selected={uploadStorage.newTaskDeadline}
                                     onChange={(date) => uploadStorage.setNewTaskDeadline(date)}
@@ -71,7 +72,12 @@ export default observer(function AddTask() {
 
                         </div>
 
-                        <button type="button" onClick={() => {uploadStorage.createNewTask().then(() => {navigate('/course-details-teacher', { replace: true })})}}>Create</button>
+                        <div className='create-user-main'>
+                            <button type="button"
+                                onClick={() => { uploadStorage.createNewTask().then(() => { navigate('/course-details-teacher', { replace: true }) }) }}>
+                                Stwórz
+                            </button>
+                        </div>
 
                     </form>
 

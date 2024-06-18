@@ -10,17 +10,17 @@ export default observer(function AddUser() {
     return (
         <>
             <div className='create-user-main'>
-                <h1>Create new user<br />account</h1>
+                <h1>Utwórz nowego użytkownika</h1>
                 <form>
                     <div>
-                        <label>Email</label>
+                        <label>Email: </label>
                         <input type="text" value={appStorage.newUserEmail}
                             onChange={(e) => { appStorage.setNewUserEmail(e.target.value) }}
                         />
                     </div>
 
                     <div>
-                        <label>Password</label>
+                        <label>Hasło: </label>
                         <input type="password" value={appStorage.newUserPassword}
                             onChange={(e) => { appStorage.setNewUserPassword(e.target.value) }}
                             onKeyDown={async (event) => {
@@ -32,17 +32,17 @@ export default observer(function AddUser() {
                     </div>
 
                     <div>
-                        <label>Role</label>
+                        <label>Typ konta: </label>
                         <select value={appStorage.newUserRole}
                             onChange={(e) => { appStorage.setNewUserRole(e.target.value) }}>
                             <option value="student">Student</option>
-                            <option value="teacher">Teacher</option>
+                            <option value="teacher">Nauczyciel</option>
                         </select>
                     </div>
 
                 </form>
 
-                <button type="button" onClick={appStorage.signIn}>Create</button>
+                <button type="button" onClick={appStorage.signIn}>Stwórz</button>
             </div>
         </>
     )

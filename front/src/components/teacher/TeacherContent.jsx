@@ -53,7 +53,7 @@ export default observer(function TeacherContent() {
         <>
             {loading ?
                 // <div className='loadingScreen'> Wait... </div> // Hmm? //#REVIEW
-                <div> Wait... </div>
+                <div> Momencik... </div>
                 :
                 <div className='teacher-content content'>
 
