@@ -9,6 +9,7 @@ import CourseJoin from './CourseJoin'
 import StudentMyCourses from './StudentMyCourses'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import StudentCoursePanel from './StudentCoursePanel'
+import PageNotFound from '../PageNotFound'
 
 const studentRouter = createBrowserRouter([
     {
@@ -23,6 +24,10 @@ const studentRouter = createBrowserRouter([
         path: '/task-details-student',
         element: <StudentUploadPanel />,
     },
+    {
+        path: "*",
+        element: <PageNotFound />
+    }
 ]);
 
 export default observer(function StudentContent() {

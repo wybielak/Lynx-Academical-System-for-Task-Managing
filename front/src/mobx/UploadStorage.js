@@ -28,7 +28,7 @@ export default class UploadStorage {
 
     newTaskName = ''
     newTaskDescription = ''
-    newTaskDeadline = ''
+    newTaskDeadline = new Date()
 
     setCourseTasks = (data) => {
         this.courseTasks = data
@@ -140,7 +140,7 @@ export default class UploadStorage {
         })
             .then((res) => {
                 console.log("Utworzono nowego taska z id: ", res.id);
-                alert("Utworzono zadanie")
+                // alert("Utworzono zadanie")
                 console.log("Czyszcze zmienną")
                 this.setNewTaskName('')
                 this.setNewTaskDescription('')

@@ -10,6 +10,7 @@ import TeacherCoursesList from './TeacherCoursesList'
 import TeacherCoursePanel from './TeacherCoursePanel'
 import TeacherTaskPanel from './TeacherTaskPanel'
 import AddTask from './AddTask'
+import PageNotFound from '../PageNotFound'
 import Header from '../Header'
 
 const teacherRouter = createBrowserRouter([
@@ -29,6 +30,10 @@ const teacherRouter = createBrowserRouter([
         path: '/create-task-teacher',
         element: <AddTask />,
     },
+    {
+        path: "*",
+        element: <PageNotFound />
+    }
 ]);
 
 export default observer(function TeacherContent() {

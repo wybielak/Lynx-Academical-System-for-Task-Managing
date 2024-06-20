@@ -13,9 +13,14 @@ export default observer(function TeacherTaskPanel() {
 
     const { appStorage } = useStore();
     const { uploadStorage } = useStore();
+    const [studentsIdsWhoNotSubmitted, setStudentsIdsWhoNotSubmitted] = useState([])
 
     registerLocale('pl', pl)
     let navigate = useNavigate();
+
+    useEffect(() => {
+        setStudentsIdsWhoNotSubmitted(appStorage.selectedCourseFull.studentsIds.filter(x => !uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.includes(x)))
+    }, [])
 
     return (
         <>
@@ -45,7 +50,6 @@ export default observer(function TeacherTaskPanel() {
                         &nbsp;
                         <button onClick={() => uploadStorage.updateTaskDescription(uploadStorage.selectedTaskFull)}>Zapisz</button>
 
-
                         <p> Deadline: &nbsp;
                             {/* trza konwertować z timestampa na Date() */}
                             {new Date(uploadStorage.selectedTaskFull.taskDeadline.seconds * 1000).toLocaleTimeString('pl-PL',
@@ -57,6 +61,15 @@ export default observer(function TeacherTaskPanel() {
                                 }
                             )}
                         </p>
+                        {new Date(uploadStorage.selectedTaskFull.taskDeadline.seconds * 1000) < new Date() ?
+                            <p className='afterDeadline'>
+                                Po terminie!
+                            </p>
+                            :
+                            <p>
+                                Jest jeszcze czas!
+                            </p>
+                        }
                         <div className='calender'>
                             Edytuj: <DatePicker
                                 selected={uploadStorage.updatedTaskDeadline}
@@ -73,24 +86,46 @@ export default observer(function TeacherTaskPanel() {
                             <button onClick={() => uploadStorage.updateTaskDeadline(uploadStorage.selectedTaskFull)}>Zapisz</button>
                         </div>
 
-                        {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.length == 0 ?
+                        {appStorage.selectedCourseFull.studentsIds.length == 0 ?
                             <h4>
-                                Brak przesłanych prac
+                                Aktualnie brak studenów w kursie
                             </h4>
                             :
-                            <>
-                                <h3> Przesłali: </h3>
-                                {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.map((studentId) => (
-                                    <div className='course-join-info' key={studentId}>
-                                        <IdToNameMaper id={studentId} />
-                                        <button
-                                            onClick={() => uploadStorage.downloadTask(appStorage.selectedCourseFull.courseName, studentId, uploadStorage.selectedTaskFull.taskName)}>
-                                            Pobierz
-                                        </button>
-                                    </div>
-                                ))}
-                            </>
+                            uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.length == 0 ?
+                                <h4>
+                                    Nikt nie przesłał jeszcze żadnej pracy
+                                </h4>
+                                :
+                                <>
+                                    <h3> Przesłali: </h3>
+                                    {uploadStorage.selectedTaskFull.studentsIdsWhoSubmitted.map((studentId) => (
+                                        <div className='course-join-info' key={studentId}>
+                                            <IdToNameMaper id={studentId} />
+                                            <button
+                                                onClick={() => uploadStorage.downloadTask(appStorage.selectedCourseFull.courseName, studentId, uploadStorage.selectedTaskFull.taskName)}>
+                                                Pobierz
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <h3> Nie przesłali: </h3>
+                                    {new Date(uploadStorage.selectedTaskFull.taskDeadline.seconds * 1000) < new Date() ?
+                                        studentsIdsWhoNotSubmitted.map((studentId) => (
+                                            <div className='course-join-info afterDeadline' key={studentId}>
+                                                <IdToNameMaper id={studentId} />
+                                            </div>
+                                        ))
+                                        :
+                                        studentsIdsWhoNotSubmitted.map((studentId) => (
+                                            <div className='course-join-info' key={studentId}>
+                                                <IdToNameMaper id={studentId} />
+                                            </div>
+                                        ))
+                                    }
+                                </>
                         }
+
+
+
 
                     </div>
             }

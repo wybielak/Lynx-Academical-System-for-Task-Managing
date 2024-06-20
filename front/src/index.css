@@ -378,14 +378,16 @@ body, .main-container {
 
 
 
+.afterDeadline {
+    color: red;
+}
+
 /* .calender {
     display: flex;
     flex-wrap: wrap;
     min-width: 500px;
     background-color: #bbb;
 } */
-
-
 
 /* .content {
     background-color: var(--lightGray2);

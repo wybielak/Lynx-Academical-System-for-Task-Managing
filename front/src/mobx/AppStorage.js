@@ -78,6 +78,9 @@ export default class AppStorage {
         console.log("Próbuje stworzyć użytkownika: ", this.newUserEmail, this.newUserPassword, this.newUserRole)
         let originalUser = auth.currentUser
         try {
+            if (!this.newUserEmail || !this.newUserPassword) {
+                throw "Nie można utworzyć"
+            }
             createUserWithEmailAndPassword(auth, this.newUserEmail, this.newUserPassword)
                 .then((createdUser) => {
                     addDoc(this.rolesCollection, { userId: createdUser.user.uid, name: createdUser.user.email, role: this.newUserRole })
@@ -89,8 +92,9 @@ export default class AppStorage {
                     console.log("err: ", err.message)
                     alert("Nie udało się utworzyć nowego użytkownika")
                 })
-            } catch (err) {
-                console.log("err")
+        } catch (err) {
+            alert("Nie udało się utworzyć nowego użytkownika")
+            console.log("err")
         }
         console.log("Czyszcze inputy")
         this.setNewUserEmail('')
@@ -170,26 +174,48 @@ export default class AppStorage {
 
     // tworzenie nowego kursu
     createNewCourse = async () => {
-
-        await addDoc(collection(db, "courses"), {
-            courseName: this.newCourseName,
-            ownerId: auth.currentUser.uid,
-            studentsIds: [],
-            waitingStudentsIds: [],
-        }).then((res) => {
-            console.log("Utworzono nowy kurs z id: ", res.id);
-            alert("Utworzono kurs")
-            console.log("Czyszcze zmienną")
-            this.setNewCourseName('')
-            this.getMyCourses()
-        })
+        try {
+            if (this.newCourseName == "" || !this.newCourseName) {
+                throw "Nazwa pusta!"
+            }
+            await addDoc(collection(db, "courses"), {
+                courseName: this.newCourseName,
+                ownerId: auth.currentUser.uid,
+                studentsIds: [],
+                waitingStudentsIds: [],
+            }).then((res) => {
+                console.log("Utworzono nowy kurs z id: ", res.id);
+                console.log("Czyszcze zmienną")
+                this.setNewCourseName('')
+                this.getMyCourses()
+                alert("Utworzono kurs")
+            })
+        } catch {
+            alert("Nie można utworzyć")
+        }
     }
 
     // usunięcie kursu
     deleteCourse = async (courseId) => {
-        console.log("Usuwam kurs ", courseId)
-        await deleteDoc(doc(db, "courses", courseId));
-        alert("Usunięto kurs")
+        try {
+            console.log("Usuwam kurs ", courseId)
+            await deleteDoc(doc(db, "courses", courseId));
+
+            const courseTasksIdsQuery = query(this.tasksCollection, where("courseId", "==", courseId));
+            const data = await getDocs(courseTasksIdsQuery)
+            const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+            
+            console.log("taski do usuniecia: ", filteredData)
+
+            filteredData.forEach(task => {
+                console.log("Usuwam taska ", task.id)
+                deleteDoc(doc(db, "tasks", task.id));
+            });
+
+            alert("Usunięto kurs wraz z jego zadaniami")
+        } catch {
+
+        }
     }
 
     setMyCourses = (data) => {
@@ -435,13 +461,18 @@ export default class AppStorage {
         console.log('Ustawiono currentCourseId')
     }
 
+    setCurrentCourseData = (data) => {
+        this.currentCourseData = data
+        console.log('Ustawiono currentCourseData')
+    }
+
     getCurrentCourseData = async () => {  // TODO
         console.log("Pobieram szczegoly kursu studenta")
         try {
             if (this.currentCourseId !== '') {
                 const courseRef = doc(this.coursesCollection, this.currentCourseId)
                 const data = await getDoc(courseRef)
-                this.currentCourseData = { ...data.data(), id: data.id };
+                this.setCurrentCourseData({ ...data.data(), id: data.id })
             }
         } catch (err) {
             console.log(err)
@@ -480,13 +511,18 @@ export default class AppStorage {
         console.log('Ustawiono currentTaskId')
     }
 
+    setCurrentTaskData = (data) => {
+        this.currentTaskData = data
+        console.log('Ustawiono currentTaskData')
+    }
+
     getCurrentTaskData = async () => {  // TODO
         console.log("Pobieram szczegoly zadania studenta")
         try {
             if (this.currentCourseId !== '') {
                 const taskRef = doc(this.tasksCollection, this.currentTaskId)
                 const data = await getDoc(taskRef)
-                this.currentTaskData = { ...data.data(), id: data.id };
+                this.setCurrentTaskData({ ...data.data(), id: data.id })
             }
         } catch (err) {
             console.log(err)
@@ -530,6 +566,10 @@ export default class AppStorage {
 
     checker = false
 
+    setChecker = (bul) => {
+        this.checker = bul
+    }
+
     checkStudentToSubmitted = async (studentid) => {
         try {
 
@@ -549,9 +589,9 @@ export default class AppStorage {
 
                 console.log(task.studentsIdsWhoSubmitted.includes(studentid))
                 if (task.studentsIdsWhoSubmitted.includes(studentid)) {
-                    this.checker = true
+                    this.setChecker(true)
                 } else {
-                    this.checker = false
+                    this.setChecker(false)
                 }
             })
 

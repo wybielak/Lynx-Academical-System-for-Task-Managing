@@ -1,15 +1,19 @@
 fixnięte:
-> odświeżanie po zaakceptowaniu studenta do kursu
+> wyświetlanie daty w StudentUploadPanel
+> poprawienie loadingu w StudentUploadPanel
+> poprawienie loadingu w StudentCoursePanel
 
 dodane:
-> możliwość edycji opisu i deadline'a zadania
-> możliwość stworzenia nowego zadania (dodanie <AddTask>)
-> możliwość usunięcia zadania
-> możliwość usunięcia kursu
+> CSS
+> sprawdzanie czy nazwa nowego kursu nie jest pusta
+> domyślna data przy tworzeniu zadania
+> usuwanie wszystkich zadań kursu przy jego usuwaniu
+> system pokazuje na czerwono jak jest zadanie "po terminie"
+> redirect 404 na "\" (<PageNotFound>)
 
 TO FIX: 
 > Enter na 'Course name' <input> robi nieintencjonalnie odświeżenie strony
 
 TO DO: 
-> przy usuwaniu kursu dodać usuwanie też jego zadań
-> CSS
+> zapamiętywanie wybranego kursu/taska w jakimś local storage 
+> cofanie do "\" przy przelogowywaniu
