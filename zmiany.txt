@@ -1,15 +1,9 @@
-fixnięte:
-> wyświetlanie daty w StudentUploadPanel
-> poprawienie loadingu w StudentUploadPanel
-> poprawienie loadingu w StudentCoursePanel
+FIXED:
+> poprawne tworzenie nauczyciela (brakowało await)
+> sprawdzanie przy kursach i tasku ID zamiast Data (bo trzebało dwa razy kliknąć)
 
-dodane:
-> CSS
-> sprawdzanie czy nazwa nowego kursu nie jest pusta
-> domyślna data przy tworzeniu zadania
-> usuwanie wszystkich zadań kursu przy jego usuwaniu
-> system pokazuje na czerwono jak jest zadanie "po terminie"
-> redirect 404 na "\" (<PageNotFound>)
+NOWODODANE:
+> 
 
 TO FIX: 
 > Enter na 'Course name' <input> robi nieintencjonalnie odświeżenie strony
