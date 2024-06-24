@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj": {}
+    "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj": {
+    "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+        "projectUniqueName": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
         "projectName": "lynxFileAPI",
-        "projectPath": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
-        "packagesPath": "C:\\Users\\gesie\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\gesie\\astudia_repos\\Lynx-master\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
+        "projectPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-master\\back\\lynxFileAPI\\lynxFileAPI\\lynxFileAPI.csproj",
+        "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
+        "outputPath": "E:\\astudia_repos\\Lynx-Academical-System-for-Task-Managing-master\\back\\lynxFileAPI\\lynxFileAPI\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\gesie\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

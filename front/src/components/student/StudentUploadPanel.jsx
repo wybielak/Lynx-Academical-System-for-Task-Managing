@@ -23,10 +23,10 @@ export default observer(function StudentUploadPanel() {
 
     return (
         <>
-            {appStorage.currentTaskData == '' ?
-                
+            {appStorage.currentTaskId == '' ?
+
                 <Navigate to={'/course-details-student'} />
-                
+
                 :
 
                 loading ?

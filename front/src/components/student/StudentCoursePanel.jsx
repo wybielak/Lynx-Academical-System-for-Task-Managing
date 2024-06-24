@@ -17,7 +17,7 @@ export default observer(function StudentCoursePanel() {
 
     return (
         <>
-            {appStorage.currentCourseData == '' ?
+            {appStorage.currentCourseId == '' ?
 
                 <Navigate to={'/'} />
 

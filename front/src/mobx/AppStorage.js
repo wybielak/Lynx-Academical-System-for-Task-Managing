@@ -70,7 +70,7 @@ export default class AppStorage {
 
     setNewUserRole = (v) => {
         this.newUserRole = v
-        // console.log("newUserRole = ", this.newUserRole)
+        console.log("newUserRole = ", this.newUserRole)
     }
 
     // tworzenie nowego uzytkownika
@@ -82,8 +82,8 @@ export default class AppStorage {
                 throw "Nie można utworzyć"
             }
             createUserWithEmailAndPassword(auth, this.newUserEmail, this.newUserPassword)
-                .then((createdUser) => {
-                    addDoc(this.rolesCollection, { userId: createdUser.user.uid, name: createdUser.user.email, role: this.newUserRole })
+                .then(async (createdUser) => {
+                    await addDoc(this.rolesCollection, { userId: createdUser.user.uid, name: createdUser.user.email, role: this.newUserRole })
                     console.log("Utworzono nowego użytkownika")
                     auth.updateCurrentUser(originalUser)
                     alert("Utworzono nowego użytkownika")
@@ -204,7 +204,7 @@ export default class AppStorage {
             const courseTasksIdsQuery = query(this.tasksCollection, where("courseId", "==", courseId));
             const data = await getDocs(courseTasksIdsQuery)
             const filteredData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-            
+
             console.log("taski do usuniecia: ", filteredData)
 
             filteredData.forEach(task => {
